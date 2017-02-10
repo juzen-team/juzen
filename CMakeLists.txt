@@ -30,7 +30,7 @@ endif()
 include_directories("src/" ${JELLOW_INCLUDE_DIRS})
 
 set(SOURCE_FILES
-    src/main.cpp)
+    src/main.cpp src/Roster/Roster.cpp src/Roster/Roster.h src/Account.cpp src/Account.h)
 
 add_executable(juzen ${SOURCE_FILES})
 set_target_properties(juzen PROPERTIES
