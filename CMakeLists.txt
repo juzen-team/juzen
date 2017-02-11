@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.3)
 project(juzen)
+
+set(CMAKE_AUTOMOC TRUE)
+set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 include(CheckCXXCompilerFlag)
 function(enable_cxx_compiler_flag_if_supported flag)
@@ -13,7 +16,7 @@ function(enable_cxx_compiler_flag_if_supported flag)
 endfunction()
 
 enable_cxx_compiler_flag_if_supported("-Wall")
-enable_cxx_compiler_flag_if_supported("-Wextra")
+#enable_cxx_compiler_flag_if_supported("-Wextra")
 enable_cxx_compiler_flag_if_supported("-pedantic")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -30,7 +33,15 @@ endif()
 include_directories("src/" ${JELLOW_INCLUDE_DIRS})
 
 set(SOURCE_FILES
-    src/main.cpp src/Roster/Roster.cpp src/Roster/Roster.h src/Account.cpp src/Account.h)
+    src/main.cpp
+    src/Roster/Roster.cpp
+    src/Roster/Roster.h
+    src/System/AppInfo.cpp
+    src/System/AppInfo.h
+    src/System/Settings.cpp
+    src/System/Settings.h
+    src/Account.cpp
+    src/Account.h)
 
 add_executable(juzen ${SOURCE_FILES})
 set_target_properties(juzen PROPERTIES
@@ -38,4 +49,3 @@ set_target_properties(juzen PROPERTIES
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF)
 target_link_libraries(juzen Qt5::Core Qt5::Gui Qt5::Widgets ${JELLOW_LIBRARIES})
-

@@ -14,7 +14,7 @@ public:
     Account(const QString &jid);
     virtual ~Account();
 
-    Jreen::Client *getClient() const;
+    Jreen::Client *getClient();
 
 private:
     void onConnected();
