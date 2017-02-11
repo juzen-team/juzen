@@ -23,12 +23,12 @@ public:
                 return defaultValue;
             }
             
-            return list.at(index).value<T>();
+            return list.at(index).template value<T>();
         }
         
         if (config.type() == QVariant::Map) {
             auto map = config.toMap();
-            return map.value(key, defaultValue).value<T>();
+            return map.value(key, defaultValue).template value<T>();
         }
         
         return defaultValue;
