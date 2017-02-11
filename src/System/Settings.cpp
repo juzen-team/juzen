@@ -1,14 +1,25 @@
 #include "System/Settings.h"
+#include "System/AppInfo.h"
 #include <QtCore/QJsonDocument>
 
-Settings::Settings(const QString &path) : configFile(path)
+Settings::Settings(const QString &path, bool relative)
 {
-    readSettings();
+    if (relative) {
+        setRelativeConfigPath(path);
+    } else {
+        setPath(path);
+    }
 }
 
 void Settings::setPath(const QString &path)
 {
     configFile.setFileName(path);
+    readSettings();
+}
+
+void Settings::setRelativeConfigPath(const QString &path)
+{
+    configFile.setFileName(QString("%1/%2.json").arg(AppInfo::getDataDir(), path));
     readSettings();
 }
 

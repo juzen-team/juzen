@@ -2,10 +2,12 @@
 #define JUZEN_ACCOUNT_H
 
 #include "Roster/Roster.h"
+#include "System/Settings.h"
+
 #include <jreen/client.h>
 #include <QtCore/QObject>
-#include <QtCore/QString>
 
+class QString;
 class Account: public QObject
 {
     Q_OBJECT
@@ -22,6 +24,7 @@ private:
     Jreen::Client client;
     Roster roster;
 
+    Settings settings;
     QString jid;
 };
 

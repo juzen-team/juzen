@@ -7,8 +7,10 @@
 class Settings : public QObject
 {
 public:
-    Settings(const QString &path = QString());
+    Settings(const QString &path = QString(), bool relative = true);
+    
     void setPath(const QString &path);
+    void setRelativeConfigPath(const QString &path);
     
     template<typename T>
     T get(const QString &key, const T &defaultValue = T())

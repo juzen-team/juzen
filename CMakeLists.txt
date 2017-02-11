@@ -41,7 +41,9 @@ set(SOURCE_FILES
     src/System/Settings.cpp
     src/System/Settings.h
     src/Account.cpp
-    src/Account.h)
+    src/Account.h
+    src/AccountManager.cpp
+    src/AccountManager.h)
 
 add_executable(juzen ${SOURCE_FILES})
 set_target_properties(juzen PROPERTIES
