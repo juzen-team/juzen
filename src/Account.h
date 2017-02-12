@@ -17,6 +17,7 @@ public:
     virtual ~Account();
 
     Jreen::Client *getClient();
+    Roster *getRoster();
 
 private:
     void onConnected();

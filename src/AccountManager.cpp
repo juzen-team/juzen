@@ -4,12 +4,17 @@
 
 #include <QtCore/QString>
 
-AccountManager::AccountManager() : account(findWorkingAccount())
+AccountManager::AccountManager() : account(findActiveAccount())
 {
 }
 
-QString AccountManager::findWorkingAccount()
+Account *AccountManager::getActiveAccount()
+{
+    return &account;
+}
+
+QString AccountManager::findActiveAccount()
 {
     Settings settings("config");
-    return settings.get<QString>("working_account");
+    return settings.get<QString>("active_account");
 }

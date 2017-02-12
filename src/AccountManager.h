@@ -12,8 +12,10 @@ class AccountManager: public QObject
 public:
     AccountManager();
 
+    Account *getActiveAccount();
+
 private:
-    QString findWorkingAccount();
+    QString findActiveAccount();
     
     Account account;
 };

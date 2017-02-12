@@ -25,6 +25,11 @@ Jreen::Client *Account::getClient()
     return &client;
 }
 
+Roster *Account::getRoster()
+{
+    return &roster;
+}
+
 void Account::onConnected()
 {
     client.setPresence(Jreen::Presence::Available);

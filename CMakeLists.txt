@@ -43,7 +43,7 @@ set(SOURCE_FILES
     src/Account.cpp
     src/Account.h
     src/AccountManager.cpp
-    src/AccountManager.h)
+    src/AccountManager.h src/Widgets/ContactListView.cpp src/Widgets/ContactListView.h src/Widgets/ContactListDelegate.cpp src/Widgets/ContactListDelegate.h src/Widgets/ContactListModel.cpp src/Widgets/ContactListModel.h)
 
 add_executable(juzen ${SOURCE_FILES})
 set_target_properties(juzen PROPERTIES
