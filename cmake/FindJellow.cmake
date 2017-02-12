@@ -8,7 +8,7 @@
 
 if(WIN32)
 	find_path(JELLOW_INCLUDE_DIRS jreen/jreen.h $ENV{INCLUDE})
-	find_library(JELLOW_LIBRARIES libjreen-qt5 $ENV{LIB})
+	find_library(JELLOW_LIBRARIES jreen-qt5 $ENV{LIB})
 else()
 	find_path(JELLOW_INCLUDE_DIRS jreen/jreen.h PATH_SUFFIXES jreen-qt5)
 	find_library(JELLOW_LIBRARIES jreen-qt5)
