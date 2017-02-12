@@ -7,17 +7,20 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 include(CheckCXXCompilerFlag)
 function(enable_cxx_compiler_flag_if_supported flag)
     string(FIND "${CMAKE_CXX_FLAGS}" "${flag}" flag_already_set)
-    if(flag_already_set EQUAL -1)
+    if (flag_already_set EQUAL -1)
         check_cxx_compiler_flag("${flag}" flag_supported)
-        if(flag_supported)
+        if (flag_supported)
+            message(status "supported")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}" PARENT_SCOPE)
         endif()
     endif()
 endfunction()
 
-enable_cxx_compiler_flag_if_supported("-Wall")
-#enable_cxx_compiler_flag_if_supported("-Wextra")
-enable_cxx_compiler_flag_if_supported("-pedantic")
+if (NOT MSVC)
+    enable_cxx_compiler_flag_if_supported("-Wall")
+    enable_cxx_compiler_flag_if_supported("-Wextra")
+    enable_cxx_compiler_flag_if_supported("-pedantic")
+endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -43,7 +46,13 @@ set(SOURCE_FILES
     src/Account.cpp
     src/Account.h
     src/AccountManager.cpp
-    src/AccountManager.h src/Widgets/ContactListView.cpp src/Widgets/ContactListView.h src/Widgets/ContactListDelegate.cpp src/Widgets/ContactListDelegate.h src/Widgets/ContactListModel.cpp src/Widgets/ContactListModel.h)
+    src/AccountManager.h
+    src/Widgets/ContactListView.cpp
+    src/Widgets/ContactListView.h
+    src/Widgets/ContactListDelegate.cpp
+    src/Widgets/ContactListDelegate.h
+    src/Widgets/ContactListModel.cpp
+    src/Widgets/ContactListModel.h)
 
 add_executable(juzen ${SOURCE_FILES})
 set_target_properties(juzen PROPERTIES
