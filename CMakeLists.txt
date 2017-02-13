@@ -52,7 +52,13 @@ set(SOURCE_FILES
     src/Widgets/ContactListDelegate.cpp
     src/Widgets/ContactListDelegate.h
     src/Widgets/ContactListModel.cpp
-    src/Widgets/ContactListModel.h)
+    src/Widgets/ContactListModel.h
+    src/Widgets/AccountAddWizard.cpp
+    src/Widgets/AccountAddWizard.h
+    src/Widgets/WizardStartPage.cpp
+    src/Widgets/WizardStartPage.h
+    src/Widgets/AccountAddExistingWizardPage.cpp
+    src/Widgets/AccountAddExistingWizardPage.h)
 
 add_executable(juzen ${SOURCE_FILES})
 set_target_properties(juzen PROPERTIES

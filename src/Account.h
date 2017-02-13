@@ -13,8 +13,14 @@ class Account: public QObject
     Q_OBJECT
 
 public:
-    Account(const QString &jid);
+    Account(const QString &jid = QString());
     virtual ~Account();
+
+	bool isNull() const;
+
+	void setJid(const QString &jid);
+
+	void connectToServer();
 
     Jreen::Client *getClient();
     Roster *getRoster();
@@ -25,8 +31,7 @@ private:
     Jreen::Client client;
     Roster roster;
 
-    Settings settings;
-    QString jid;
+	QString jid;
 };
 
 #endif //JUZEN_ACCOUNT_H

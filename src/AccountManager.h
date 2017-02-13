@@ -4,7 +4,7 @@
 #include "Account.h"
 #include <QtCore/QObject>
 
-class QString;
+class QStringList;
 class AccountManager: public QObject
 {
     Q_OBJECT
@@ -12,10 +12,14 @@ class AccountManager: public QObject
 public:
     AccountManager();
 
+	bool addExistingAccount(const QString &jid, const QString &password, int port);
+	bool registerAccount();
+
     Account *getActiveAccount();
 
 private:
-    QString findActiveAccount();
+	QStringList findAllAccounts() const;
+    QString findActiveAccount() const;
     
     Account account;
 };

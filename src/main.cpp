@@ -9,26 +9,32 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName("juzen");
+	app.setApplicationName("juzen");
 
-    ContactListView clv;
-    
-    AccountManager am;
+	auto palette = app.palette();
+	palette.setColor(QPalette::Background, Qt::white);
+	app.setPalette(palette);
 
-    auto vcm = new Jreen::VCardManager(am.getActiveAccount()->getClient());
-    auto roster = am.getActiveAccount()->getRoster();
+	AccountManager am;
+	if (am.getActiveAccount()->isNull()) {
+		return 0;
+	}
 
-    QObject::connect(roster, &Roster::itemAdded, [&](QSharedPointer<Jreen::RosterItem> item)
-    {
-        vcm->fetch(item->jid());
+	ContactListView clv;
+	auto vcm = new Jreen::VCardManager(am.getActiveAccount()->getClient());
+	auto roster = am.getActiveAccount()->getRoster();
 
-    });
-    QObject::connect(vcm, &Jreen::VCardManager::vCardFetched, [&](const Jreen::VCard::Ptr &vcard, const Jreen::JID &jid)
-    {
-        clv.model()->add(vcard->formattedName(), roster->getPresenceText(jid.bare()), vcard->photo().data(), vcard->photo().mimeType());
-    });
+	QObject::connect(roster, &Roster::itemAdded, [&](QSharedPointer<Jreen::RosterItem> item)
+	{
+		vcm->fetch(item->jid());
 
-    clv.show();
+	});
+	QObject::connect(vcm, &Jreen::VCardManager::vCardFetched, [&](const Jreen::VCard::Ptr &vcard, const Jreen::JID &jid)
+	{
+		clv.model()->add(vcard->formattedName(), roster->getPresenceText(jid.bare()), vcard->photo().data(), vcard->photo().mimeType());
+	});
+
+	clv.show();
 
     return app.exec();
 }

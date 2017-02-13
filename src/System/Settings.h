@@ -6,6 +6,8 @@
 
 class Settings : public QObject
 {
+	Q_OBJECT
+
 public:
     Settings(const QString &path = QString(), bool relative = true);
     
@@ -48,20 +50,21 @@ public:
             }
             
             config = list;
-        } else if (config.type() == QVariant::Map) {
-            auto map = config.toMap();
+        } else {
+			QMap<QString, QVariant> map;
+			if (config.type() == QVariant::Map) {
+				map = config.toMap();
+			}
             map[key] = value;
             config = map;
-        } else {
-            return;
         }
         
         writeSettings();
-        emit settingChanged(key);
+        emit settingsChanged(key);
     }
     
 signals:
-    void settingChanged(const QString &key);
+    void settingsChanged(const QString &key);
     
 private:
     void readSettings();
