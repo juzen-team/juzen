@@ -14,6 +14,8 @@ public:
 
 	int nextId() const;
 
+	AccountManager *getAccountManager();
+
 private:
 	AccountManager *am;
 

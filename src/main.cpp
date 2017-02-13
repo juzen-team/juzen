@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 	app.setApplicationName("juzen");
+    app.setApplicationVersion("0.1");
 
 	auto palette = app.palette();
 	palette.setColor(QPalette::Background, Qt::white);

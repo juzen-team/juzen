@@ -8,7 +8,7 @@ ContactListModel::~ContactListModel()
 {
 }
 
-int ContactListModel::rowCount(const QModelIndex &parent) const
+int ContactListModel::rowCount(const QModelIndex &/*parent*/) const
 {
     return items.size();
 }

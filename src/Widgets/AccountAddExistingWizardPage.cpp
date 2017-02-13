@@ -4,7 +4,7 @@
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
 
-AccountAddExistingWizardPage::AccountAddExistingWizardPage(AccountManager *am, QWidget *parent) : am(am), QWizardPage(parent)
+AccountAddExistingWizardPage::AccountAddExistingWizardPage(QWidget *parent) : QWizardPage(parent)
 {
 	setTitle("Use existing account");
 
@@ -51,5 +51,10 @@ bool AccountAddExistingWizardPage::validatePage()
 		return false;
 	}
 
-	return am->addExistingAccount(jid, password, port);
+	return wizard()->getAccountManager()->addExistingAccount(jid, password, port);
+}
+
+AccountAddWizard *AccountAddExistingWizardPage::wizard() const
+{
+	return qobject_cast<AccountAddWizard *>(QWizardPage::wizard());
 }

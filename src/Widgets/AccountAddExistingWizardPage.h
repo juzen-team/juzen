@@ -2,6 +2,7 @@
 #define JUZEN_ACCOUNTADDEXISTINGWIZARDPAGE_H
 
 #include "AccountManager.h"
+#include "Widgets/AccountAddWizard.h"
 #include <QtWidgets/QWizardPage>
 
 class AccountAddExistingWizardPage: public QWizardPage
@@ -9,15 +10,16 @@ class AccountAddExistingWizardPage: public QWizardPage
     Q_OBJECT
 
 public:
-	AccountAddExistingWizardPage(AccountManager *am, QWidget *parent = Q_NULLPTR);
+	AccountAddExistingWizardPage(QWidget *parent = Q_NULLPTR);
     virtual ~AccountAddExistingWizardPage();
 
 	bool isComplete() const;
 	bool validatePage();
 
-private:
-	AccountManager *am;
+protected:
+	AccountAddWizard *wizard() const;
 
+private:
 	QString jid;
 	QString password;
 	int port;

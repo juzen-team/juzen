@@ -16,7 +16,7 @@ QString AppInfo::getDataDir()
     // Check if that portable version
     dir.setPath(AppInfo::getExecutableDir());
     if (dir.exists()) {
-        if (dir.cd("Juzen")) {
+        if (dir.cd("Juzen") || dir.cd("juzen")) {
             return dir.path();
         }
     }

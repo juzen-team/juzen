@@ -5,7 +5,7 @@
 #include <QtWidgets/QCommandLinkButton>
 #include <QtWidgets/QLayout>
 
-AccountAddWizard::AccountAddWizard(AccountManager *am, QWidget *parent) : am(am), QWizard(parent)
+AccountAddWizard::AccountAddWizard(AccountManager *am, QWidget *parent) : QWizard(parent), am(am)
 {
 	setWindowTitle("Add new account");
 	setOptions(QWizard::DisabledBackButtonOnLastPage | QWizard::NoCancelButtonOnLastPage);
@@ -32,6 +32,11 @@ int AccountAddWizard::nextId() const
 	return -1;
 }
 
+AccountManager *AccountAddWizard::getAccountManager()
+{
+    return am;
+}
+
 QWizardPage *AccountAddWizard::createSelectionPage()
 {
 	auto page = new WizardStartPage(this);
@@ -40,13 +45,13 @@ QWizardPage *AccountAddWizard::createSelectionPage()
 	page->setSubTitle("You haven't any account yet. Do you want to register new account or use existing one?");
 
 	auto registerButton = new QCommandLinkButton("Register new account", "Register new account on selected server.", this);
-	connect(registerButton, &QCommandLinkButton::clicked, [&](bool checked)
+	connect(registerButton, &QCommandLinkButton::clicked, [&](bool /*checked*/)
 	{
 		nextPageId = registerPageId;
 		next();
 	});
 	auto existingButton = new QCommandLinkButton("Use existing account", this);
-	connect(existingButton, &QCommandLinkButton::clicked, [&](bool checked)
+	connect(existingButton, &QCommandLinkButton::clicked, [&](bool /*checked*/)
 	{
 		nextPageId = existingPageId;
 		next();
@@ -75,7 +80,7 @@ QWizardPage *AccountAddWizard::createRegisterPage()
 
 QWizardPage *AccountAddWizard::createExistingPage()
 {
-	return new AccountAddExistingWizardPage(am, this);
+	return new AccountAddExistingWizardPage(this);
 }
 
 QWizardPage *AccountAddWizard::createFinishPage()
