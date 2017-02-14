@@ -21,11 +21,13 @@ private:
 
 	QWizardPage *createSelectionPage();
 	QWizardPage *createRegisterPage();
+	QWizardPage *createRegisterFormPage();
 	QWizardPage *createExistingPage();
 	QWizardPage *createFinishPage();
 
 	int selectionPageId;
 	int registerPageId;
+	int registerFormPageId;
 	int existingPageId;
 	int finishPageId;
 

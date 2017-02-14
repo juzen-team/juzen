@@ -58,7 +58,9 @@ set(SOURCE_FILES
     src/Widgets/WizardStartPage.cpp
     src/Widgets/WizardStartPage.h
     src/Widgets/AccountAddExistingWizardPage.cpp
-    src/Widgets/AccountAddExistingWizardPage.h)
+    src/Widgets/AccountAddExistingWizardPage.h
+    src/Widgets/AccountRegisterWizardPage.cpp
+    src/Widgets/AccountRegisterWizardPage.h src/Widgets/DataFormWidget.cpp src/Widgets/DataFormWidget.h src/Widgets/DataFormFieldWidget.cpp src/Widgets/DataFormFieldWidget.h src/Widgets/AccountRegisterFormWizardPage.cpp src/Widgets/AccountRegisterFormWizardPage.h)
 
 add_executable(juzen ${SOURCE_FILES})
 set_target_properties(juzen PROPERTIES

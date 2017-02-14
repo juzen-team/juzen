@@ -1,5 +1,7 @@
 #include "Widgets/AccountAddWizard.h"
 #include "Widgets/AccountAddExistingWizardPage.h"
+#include "Widgets/AccountRegisterWizardPage.h"
+#include "Widgets/AccountRegisterFormWizardPage.h"
 #include "Widgets/WizardStartPage.h"
 
 #include <QtWidgets/QCommandLinkButton>
@@ -12,6 +14,7 @@ AccountAddWizard::AccountAddWizard(AccountManager *am, QWidget *parent) : QWizar
 
 	selectionPageId = addPage(createSelectionPage());
 	registerPageId = addPage(createRegisterPage());
+	registerFormPageId = addPage(createRegisterFormPage());
 	existingPageId = addPage(createExistingPage());
 	finishPageId = addPage(createFinishPage());
 }
@@ -22,14 +25,17 @@ AccountAddWizard::~AccountAddWizard()
 
 int AccountAddWizard::nextId() const
 {
-	if (currentId() == selectionPageId) {
-		return nextPageId;
-	}
-	if (currentId() == registerPageId || currentId() == existingPageId) {
-		return finishPageId;
-	}
+    if (currentId() == selectionPageId) {
+        return nextPageId;
+    }
+    if (currentId() == registerPageId) {
+        return registerFormPageId;
+    }
+    if (currentId() == registerFormPageId || currentId() == existingPageId) {
+        return finishPageId;
+    }
 
-	return -1;
+    return -1;
 }
 
 AccountManager *AccountAddWizard::getAccountManager()
@@ -67,15 +73,12 @@ QWizardPage *AccountAddWizard::createSelectionPage()
 
 QWizardPage *AccountAddWizard::createRegisterPage()
 {
-	auto page = new QWizardPage(this);
+    return new AccountRegisterWizardPage(this);
+}
 
-	page->setTitle("Register new account");
-	page->setSubTitle("Register new account on selected server. Please fill all fields.");
-
-	auto layout = new QVBoxLayout(this);
-	page->setLayout(layout);
-
-	return page;
+QWizardPage *AccountAddWizard::createRegisterFormPage()
+{
+	return new AccountRegisterFormWizardPage(this);
 }
 
 QWizardPage *AccountAddWizard::createExistingPage()
