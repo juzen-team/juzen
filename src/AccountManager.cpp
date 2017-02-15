@@ -23,6 +23,9 @@ AccountManager::AccountManager()
 	}
 
 	account.setJid(activeAccount);
+    if (account.isNull()) {
+        return;
+    }
 	account.connectToServer();
 }
 
@@ -92,20 +95,15 @@ QString AccountManager::findActiveAccount() const
 
 void AccountManager::createRegistrationObjects(const QString &server)
 {
-    if (registrationServer == server) {
-        return;
-    }
-
     deleteRegistrationObjects();
 
-    registrationServer = server;
     registrationClient = new Jreen::Client();
     registrationManager = new Jreen::RegistrationManager(server, registrationClient);
 
     connect(registrationManager, &Jreen::RegistrationManager::formReceived, [this](const Jreen::RegistrationData &data)
     {
         if (data.hasForm()) {
-            emit registerFormReceived(data);
+            emit registrationFormReceived(data);
         } else {
             Q_ASSERT(!"No form received");
         }
@@ -113,8 +111,7 @@ void AccountManager::createRegistrationObjects(const QString &server)
 
     connect(registrationManager, &Jreen::RegistrationManager::success, [this]()
     {
-        qDebug() << "success";
-        emit registerAccountStateChanged(true);
+        emit registrationSuccess();
     });
 
     connect(registrationManager, &Jreen::RegistrationManager::error, [this](const Jreen::Error::Ptr &error)
@@ -130,20 +127,17 @@ void AccountManager::createRegistrationObjects(const QString &server)
                     errorStr = "Unknown error.";
             }
         }
-        qDebug() << "error " << errorStr;
-        emit registerAccountStateChanged(false, errorStr);
+        emit registrationError(errorStr);
     });
 
     connect(registrationManager, &Jreen::RegistrationManager::unsupported, [this]()
     {
-        qDebug() << "unsupported";
-        emit registerAccountStateChanged(false, "Sorry, this server does not support in-band registration.");
+        emit registrationUnsupported();
     });
 }
 
 void AccountManager::deleteRegistrationObjects()
 {
-    registrationServer = QString();
-    delete registrationManager;
-    delete registrationClient;
+    registrationClient->deleteLater();
+    registrationManager->deleteLater();
 }

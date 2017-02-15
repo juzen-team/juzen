@@ -1,4 +1,5 @@
 #include "Account.h"
+#include <QtWidgets/QInputDialog>
 
 Account::Account(const QString &jid) : roster(this)
 {
@@ -8,7 +9,9 @@ Account::Account(const QString &jid) : roster(this)
     
     connect(&client, &Jreen::Client::connected, this, &Account::onConnected);
 
-	setJid(jid);
+    if (!jid.isEmpty()) {
+	    setJid(jid);
+    }
 }
 
 Account::~Account()
@@ -26,8 +29,20 @@ void Account::setJid(const QString &jid)
 
 	Settings settings(QString("accounts/%1/config").arg(jid));
 
+    QString password = settings.get<QString>("password");
+    if (password.isEmpty()) {
+        bool ok;
+        password = QInputDialog::getText(nullptr, "Enter password", QString("Please, enter password for account %1:").arg(jid), QLineEdit::PasswordEchoOnEdit, QString(), &ok);
+        if (ok && !password.isEmpty()) {
+            settings.set<QString>("password", password);
+        } else {
+            this->jid = QString();
+            return;
+        }
+    }
+
 	client.setJID(jid);
-	client.setPassword(settings.get<QString>("password"));
+	client.setPassword(password);
 }
 
 void Account::connectToServer()

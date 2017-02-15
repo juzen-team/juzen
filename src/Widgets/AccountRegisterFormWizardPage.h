@@ -23,8 +23,10 @@ protected:
 
 private:
     void clearLayout();
+    void performRequest();
 
     DataFormWidget *dfw = nullptr;
+    bool registrationSuccess = false;
 };
 
 #endif //JUZEN_ACCOUNTREGISTERFORMWIZARDPAGE_H

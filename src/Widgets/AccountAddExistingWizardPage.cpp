@@ -3,6 +3,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMessageBox>
 
 AccountAddExistingWizardPage::AccountAddExistingWizardPage(QWidget *parent) : QWizardPage(parent)
 {
@@ -47,7 +48,7 @@ bool AccountAddExistingWizardPage::isComplete() const
 bool AccountAddExistingWizardPage::validatePage()
 {
 	if (jid.count('@') != 1) {
-		setSubTitle("Please enter jid in following format: jid@example.com[:port]");
+        QMessageBox::critical(this, "Error", "Please enter jid in following format: jid@example.com[:port]");
 		return false;
 	}
 

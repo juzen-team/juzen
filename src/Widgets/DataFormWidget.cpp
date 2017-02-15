@@ -10,11 +10,21 @@
 #include <QtCore/QDebug>
 
 DataFormWidget::DataFormWidget(const Jreen::DataForm::Ptr &form, QWidget *parent) :
-        DataFormWidget(form, QList<Jreen::BitsOfBinary::Ptr>(), parent)
+    DataFormWidget(form, QList<Jreen::BitsOfBinary::Ptr>(), nullptr, parent)
+{
+}
+
+DataFormWidget::DataFormWidget(const Jreen::DataForm::Ptr &form, DataFormWidget *other, QWidget *parent) :
+    DataFormWidget(form, QList<Jreen::BitsOfBinary::Ptr>(), other, parent)
 {
 }
 
 DataFormWidget::DataFormWidget(const Jreen::DataForm::Ptr &form, const QList<Jreen::BitsOfBinary::Ptr> &bobs, QWidget *parent) :
+    DataFormWidget(form, bobs, nullptr, parent)
+{
+}
+
+DataFormWidget::DataFormWidget(const Jreen::DataForm::Ptr &form, const QList<Jreen::BitsOfBinary::Ptr> &bobs, DataFormWidget *other, QWidget *parent) :
         QWidget(parent), form(form)
 {
     DataFormFieldWidget::QMapBobs bobsMap;
@@ -31,6 +41,13 @@ DataFormWidget::DataFormWidget(const Jreen::DataForm::Ptr &form, const QList<Jre
 
     for (int i = 0; i < form->fieldsCount(); i++) {
         Jreen::DataFormField field = form->field(i);
+        if (other) {
+            if (field.type() != Jreen::DataFormField::Invalid &&
+                field.type() != Jreen::DataFormField::Fixed &&
+                field.type() != Jreen::DataFormField::Hidden) {
+                field.setValues(other->getDataForm()->field(i).values());
+            }
+        }
         innerLayout->addWidget(new DataFormFieldWidget(field, bobsMap, innerWidget));
     }
 

@@ -31,7 +31,13 @@ int AccountAddWizard::nextId() const
     if (currentId() == registerPageId) {
         return registerFormPageId;
     }
-    if (currentId() == registerFormPageId || currentId() == existingPageId) {
+    if (currentId() == registerFormPageId) {
+        if (property("name").toString().isEmpty()) {
+            return existingPageId;
+        }
+        return finishPageId;
+    }
+    if (currentId() == existingPageId) {
         return finishPageId;
     }
 

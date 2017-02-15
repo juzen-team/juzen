@@ -13,7 +13,7 @@ class AccountManager: public QObject
 public:
     AccountManager();
 
-	bool addExistingAccount(const QString &jid, const QString &password, int port);
+	bool addExistingAccount(const QString &jid, const QString &password, int port = -1);
 
 	void getRegisterForm(const QString &server);
     void submitRegisterForm(const Jreen::DataForm::Ptr &form);
@@ -21,8 +21,10 @@ public:
     Account *getActiveAccount();
 
 signals:
-	void registerFormReceived(const Jreen::RegistrationData &data);
-	void registerAccountStateChanged(bool result, const QString &resultStr = QString());
+	void registrationFormReceived(const Jreen::RegistrationData &data);
+    void registrationSuccess();
+    void registrationError(const QString &errorStr);
+    void registrationUnsupported();
 
 private:
 	QStringList findAllAccounts() const;
@@ -33,7 +35,6 @@ private:
     
     Account account;
 
-    QString registrationServer;
     Jreen::Client *registrationClient = nullptr;
     Jreen::RegistrationManager *registrationManager = nullptr;
 };
