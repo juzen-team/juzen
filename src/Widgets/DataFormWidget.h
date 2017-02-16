@@ -16,6 +16,8 @@ public:
     DataFormWidget(const Jreen::DataForm::Ptr &form, const QList<Jreen::BitsOfBinary::Ptr> &bobs, DataFormWidget *other, QWidget *parent = Q_NULLPTR);
     ~DataFormWidget();
 
+    bool allRequiredFieldsFilled() const;
+
     Jreen::DataForm::Ptr getDataForm();
 
 private:

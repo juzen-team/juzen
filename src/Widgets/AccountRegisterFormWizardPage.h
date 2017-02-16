@@ -16,6 +16,7 @@ public:
 
     void initializePage();
     void cleanupPage();
+    bool isComplete() const;
     bool validatePage();
 
 protected:
@@ -24,9 +25,11 @@ protected:
 private:
     void clearLayout();
     void performRequest();
+    void setPageComplete(bool complete = true);
 
     DataFormWidget *dfw = nullptr;
     bool registrationSuccess = false;
+    bool pageComplete = false;
 };
 
 #endif //JUZEN_ACCOUNTREGISTERFORMWIZARDPAGE_H

@@ -75,12 +75,23 @@ void AccountRegisterFormWizardPage::cleanupPage()
     dfw = nullptr;
 }
 
+bool AccountRegisterFormWizardPage::isComplete() const
+{
+    return pageComplete;
+}
+
 bool AccountRegisterFormWizardPage::validatePage()
 {
     if (registrationSuccess) {
         return true;
     }
 
+    if (!dfw->allRequiredFieldsFilled()) {
+        QMessageBox::critical(this, "Error", "Please fill all required fields.");
+        return false;
+    }
+
+    setPageComplete(false);
     wizard()->setProperty("name", dfw->getDataForm()->field("username").value());
     wizard()->setProperty("password", dfw->getDataForm()->field("password").value());
     wizard()->getAccountManager()->submitRegisterForm(dfw->getDataForm());
@@ -96,6 +107,8 @@ AccountAddWizard *AccountRegisterFormWizardPage::wizard() const
 void AccountRegisterFormWizardPage::clearLayout()
 {
     setSubTitle(QString());
+    setPageComplete();
+
     QLayoutItem *item;
     while ((item = layout()->takeAt(0))) {
         delete item->widget();
@@ -105,6 +118,13 @@ void AccountRegisterFormWizardPage::clearLayout()
 
 void AccountRegisterFormWizardPage::performRequest()
 {
+    setPageComplete(false);
     layout()->addWidget(new QLabel("Please, wait while register form loading...", this));
     wizard()->getAccountManager()->getRegisterForm(wizard()->property("server").toString());
+}
+
+void AccountRegisterFormWizardPage::setPageComplete(bool complete)
+{
+    pageComplete = complete;
+    emit completeChanged();
 }

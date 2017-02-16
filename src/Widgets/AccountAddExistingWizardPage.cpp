@@ -48,7 +48,7 @@ bool AccountAddExistingWizardPage::isComplete() const
 bool AccountAddExistingWizardPage::validatePage()
 {
     if (jid.count('@') != 1) {
-        QMessageBox::critical(this, "Error", "Please enter jid in following format: jid@example.com[:port]");
+        QMessageBox::critical(this, "Error", "Please enter jid in following format: jid@example.com[:port].");
         return false;
     }
 

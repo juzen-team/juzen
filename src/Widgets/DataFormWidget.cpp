@@ -64,6 +64,19 @@ DataFormWidget::~DataFormWidget()
 {
 }
 
+bool DataFormWidget::allRequiredFieldsFilled() const
+{
+    bool ok = true;
+    for (int i = 0; i < form->fieldsCount(); i++) {
+        Jreen::DataFormField field = form->field(i);
+        if (field.isRequired() && field.value().isEmpty()) {
+            ok = false;
+            break;
+        }
+    }
+    return ok;
+}
+
 Jreen::DataForm::Ptr DataFormWidget::getDataForm()
 {
     form->setType(Jreen::DataForm::Submit);
