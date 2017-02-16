@@ -16,9 +16,8 @@ public:
     Account(const QString &jid = QString());
     virtual ~Account();
 
+    void loadAccount(const QString &jid);
     bool isNull() const;
-
-    void setJid(const QString &jid);
 
     void connectToServer();
 

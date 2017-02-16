@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     app.setPalette(palette);
 
     AccountManager am;
-    if (am.getActiveAccount()->isNull()) {
+    if (!am.getActiveAccount()) {
         return 0;
     }
 

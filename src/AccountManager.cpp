@@ -3,9 +3,6 @@
 #include "Widgets/AccountAddWizard.h"
 
 #include <QtCore/QDir>
-#include <QtWidgets/QApplication>
-
-#include <QtCore/QDebug>
 
 AccountManager::AccountManager()
 {
@@ -13,20 +10,17 @@ AccountManager::AccountManager()
     if (activeAccount.isEmpty()) {
         AccountAddWizard wizard(this);
         int result = wizard.exec();
-        if (result) {
-            activeAccount = findActiveAccount();
+        if (!result) {
+            return;
         }
     }
 
+    activeAccount = findActiveAccount();
     if (activeAccount.isEmpty()) {
         return;
     }
 
-    account.setJid(activeAccount);
-    if (account.isNull()) {
-        return;
-    }
-    account.connectToServer();
+    account.loadAccount(activeAccount);
 }
 
 bool AccountManager::addExistingAccount(const QString &jid, const QString &password, int port)
@@ -63,6 +57,9 @@ void AccountManager::submitRegisterForm(const Jreen::DataForm::Ptr &form)
 
 Account *AccountManager::getActiveAccount()
 {
+    if (account.isNull()) {
+        return nullptr;
+    }
     return &account;
 }
 

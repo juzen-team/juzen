@@ -9,40 +9,44 @@ Account::Account(const QString &jid) : roster(this)
     
     connect(&client, &Jreen::Client::connected, this, &Account::onConnected);
 
-    if (!jid.isEmpty()) {
-        setJid(jid);
-    }
+    loadAccount(jid);
 }
 
 Account::~Account()
 {
 }
 
-bool Account::isNull() const
+void Account::loadAccount(const QString &jid)
 {
-    return jid.isEmpty();
-}
-
-void Account::setJid(const QString &jid)
-{
-    this->jid = jid;
+    if (jid.isEmpty()) {
+        return;
+    }
 
     Settings settings(QString("accounts/%1/config").arg(jid));
-
     QString password = settings.get<QString>("password");
+    int port = settings.get("port", -1);
+
     if (password.isEmpty()) {
         bool ok;
         password = QInputDialog::getText(nullptr, "Enter password", QString("Please, enter password for account %1:").arg(jid), QLineEdit::PasswordEchoOnEdit, QString(), &ok);
         if (ok && !password.isEmpty()) {
             settings.set<QString>("password", password);
         } else {
-            this->jid = QString();
             return;
         }
     }
+    this->jid = jid;
 
     client.setJID(jid);
     client.setPassword(password);
+    if (port != -1) {
+        client.setPort(port);
+    }   
+}
+
+bool Account::isNull() const
+{
+    return jid.isEmpty();
 }
 
 void Account::connectToServer()
