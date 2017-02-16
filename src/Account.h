@@ -16,11 +16,11 @@ public:
     Account(const QString &jid = QString());
     virtual ~Account();
 
-	bool isNull() const;
+    bool isNull() const;
 
-	void setJid(const QString &jid);
+    void setJid(const QString &jid);
 
-	void connectToServer();
+    void connectToServer();
 
     Jreen::Client *getClient();
     Roster *getRoster();
@@ -31,7 +31,7 @@ private:
     Jreen::Client client;
     Roster roster;
 
-	QString jid;
+    QString jid;
 };
 
 #endif //JUZEN_ACCOUNT_H

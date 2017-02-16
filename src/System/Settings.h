@@ -6,7 +6,7 @@
 
 class Settings : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     Settings(const QString &path = QString(), bool relative = true);
@@ -51,10 +51,10 @@ public:
             
             config = list;
         } else {
-			QMap<QString, QVariant> map;
-			if (config.type() == QVariant::Map) {
-				map = config.toMap();
-			}
+            QMap<QString, QVariant> map;
+            if (config.type() == QVariant::Map) {
+                map = config.toMap();
+            }
             map[key] = value;
             config = map;
         }

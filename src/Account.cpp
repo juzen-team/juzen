@@ -5,12 +5,12 @@ Account::Account(const QString &jid) : roster(this)
 {
     auto disco = client.disco();
     disco->setSoftwareVersion("Juzen", "0.1");
-	disco->addIdentity(Jreen::Disco::Identity("client", "type", "Juzen"));
+    disco->addIdentity(Jreen::Disco::Identity("client", "type", "Juzen"));
     
     connect(&client, &Jreen::Client::connected, this, &Account::onConnected);
 
     if (!jid.isEmpty()) {
-	    setJid(jid);
+        setJid(jid);
     }
 }
 
@@ -20,14 +20,14 @@ Account::~Account()
 
 bool Account::isNull() const
 {
-	return jid.isEmpty();
+    return jid.isEmpty();
 }
 
 void Account::setJid(const QString &jid)
 {
-	this->jid = jid;
+    this->jid = jid;
 
-	Settings settings(QString("accounts/%1/config").arg(jid));
+    Settings settings(QString("accounts/%1/config").arg(jid));
 
     QString password = settings.get<QString>("password");
     if (password.isEmpty()) {
@@ -41,13 +41,13 @@ void Account::setJid(const QString &jid)
         }
     }
 
-	client.setJID(jid);
-	client.setPassword(password);
+    client.setJID(jid);
+    client.setPassword(password);
 }
 
 void Account::connectToServer()
 {
-	client.connectToServer();
+    client.connectToServer();
 }
 
 Jreen::Client *Account::getClient()

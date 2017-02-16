@@ -10,5 +10,5 @@ WizardStartPage::~WizardStartPage()
 
 bool WizardStartPage::isComplete() const
 {
-	return false;
+    return false;
 }

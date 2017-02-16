@@ -6,7 +6,7 @@
 
 AccountRegisterWizardPage::AccountRegisterWizardPage(QWidget *parent) : QWizardPage(parent)
 {
-	setTitle("Register new account");
+    setTitle("Register new account");
     setSubTitle("Please, select a server where you want to register account.");
 
     auto serverBox = new QComboBox(this);
@@ -25,12 +25,12 @@ AccountRegisterWizardPage::AccountRegisterWizardPage(QWidget *parent) : QWizardP
             }
     );
 
-	auto layout = new QVBoxLayout(this);
-	layout->addWidget(new QLabel("Select server:"));
+    auto layout = new QVBoxLayout(this);
+    layout->addWidget(new QLabel("Select server:"));
     layout->addWidget(serverBox);
     layout->addWidget(serverLabel);
-	
-	setLayout(layout);
+    
+    setLayout(layout);
 }
 
 AccountRegisterWizardPage::~AccountRegisterWizardPage()

@@ -26,7 +26,7 @@ void AccountRegisterFormWizardPage::initializePage()
 
         connect(wizard()->getAccountManager(), &AccountManager::registrationFormReceived,
             [this](const Jreen::RegistrationData &data) {
-				auto oldDfw = dfw;
+                auto oldDfw = dfw;
                 dfw = new DataFormWidget(data.form(), data.bitsOfBinaries(), oldDfw, this);
 
                 clearLayout();
@@ -72,7 +72,7 @@ void AccountRegisterFormWizardPage::initializePage()
 void AccountRegisterFormWizardPage::cleanupPage()
 {
     clearLayout();
-	dfw = nullptr;
+    dfw = nullptr;
 }
 
 bool AccountRegisterFormWizardPage::validatePage()

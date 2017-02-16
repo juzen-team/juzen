@@ -8,10 +8,10 @@ class WizardStartPage: public QWizardPage
     Q_OBJECT
 
 public:
-	WizardStartPage(QWidget *parent = Q_NULLPTR);
+    WizardStartPage(QWidget *parent = Q_NULLPTR);
     virtual ~WizardStartPage();
 
-	bool isComplete() const;
+    bool isComplete() const;
 };
 
 #endif //JUZEN_WIZARDSTARTPAGE_H

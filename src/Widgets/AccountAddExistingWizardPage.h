@@ -10,19 +10,19 @@ class AccountAddExistingWizardPage: public QWizardPage
     Q_OBJECT
 
 public:
-	AccountAddExistingWizardPage(QWidget *parent = Q_NULLPTR);
+    AccountAddExistingWizardPage(QWidget *parent = Q_NULLPTR);
     virtual ~AccountAddExistingWizardPage();
 
-	bool isComplete() const;
-	bool validatePage();
+    bool isComplete() const;
+    bool validatePage();
 
 protected:
-	AccountAddWizard *wizard() const;
+    AccountAddWizard *wizard() const;
 
 private:
-	QString jid;
-	QString password;
-	int port;
+    QString jid;
+    QString password;
+    int port;
 };
 
 #endif //JUZEN_ACCOUNTADDEXISTINGWIZARDPAGE_H
