@@ -12,17 +12,22 @@ AccountRegisterWizardPage::AccountRegisterWizardPage(QWidget *parent) : QWizardP
     auto serverBox = new QComboBox(this);
     registerField("server*", serverBox);
 
-    servers << "Select server" << "totallynota.valdikss.org.ru" << "jabber.ru";
-    serverBox->addItems(servers);
+    // TODO: read servers from config file?
+    servers << qMakePair<QString, QString>("Select server", "Please, select any server from list.");
+    servers << qMakePair<QString, QString>("totallynota.valdikss.org.ru", "Valdikss's server for tests.\nProsody 0.10 nightly build 345 (2017-02-12, 74187ee6ed55).");
+    servers << qMakePair<QString, QString>("jabber.ru", "The largest jabber-server in Russia.\nejabberd 3.2.x.");
+    
+    for (auto &server : servers) {
+        serverBox->addItem(server.first);
+    }
 
-    auto serverLabel = new QLabel(this);
-
+    auto serverLabel = new QLabel(servers[0].second, this);
     connect(serverBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-            [this, serverBox, serverLabel](int index)
-            {
-                wizard()->setProperty("server", serverBox->itemText(index));
-                serverLabel->setText(QString("Label for server %1").arg(serverBox->itemText(index)));
-            }
+        [this, serverBox, serverLabel](int index)
+        {
+            wizard()->setProperty("server", servers[index].first);
+            serverLabel->setText(servers[index].second);
+        }
     );
 
     auto layout = new QVBoxLayout(this);

@@ -2,6 +2,7 @@
 #define JUZEN_ACCOUNTREGISTERWIZARDPAGE_H
 
 #include "Widgets/AccountAddWizard.h"
+#include <QtCore/QPair>
 #include <QtWidgets/QWizardPage>
 
 class AccountRegisterWizardPage: public QWizardPage
@@ -13,7 +14,7 @@ public:
     virtual ~AccountRegisterWizardPage();
 
 private:
-    QStringList servers;
+    QVector<QPair<QString, QString>> servers;
 };
 
 #endif //JUZEN_ACCOUNTREGISTERWIZARDPAGE_H
