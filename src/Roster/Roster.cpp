@@ -15,9 +15,9 @@ Roster::~Roster()
 
 QString Roster::getPresenceText(const QString &jid) const
 {
-    if (presences.contains(jid)) {
-        return presences[jid].second;
-    }
+    //if (presences.contains(jid)) {
+   //     return presences[jid].second;
+    //}
 
     return "Unknown";
 }

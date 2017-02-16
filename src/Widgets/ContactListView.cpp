@@ -2,7 +2,7 @@
 #include "Widgets/ContactListDelegate.h"
 #include "Widgets/ContactListModel.h"
 
-ContactListView::ContactListView(QWidget *parent) : QListView(parent)
+ContactListView::ContactListView(Roster *roster, QWidget *parent) : QListView(parent), roster(roster)
 {
     setEditTriggers(QAbstractItemView::NoEditTriggers);
 
@@ -13,6 +13,13 @@ ContactListView::ContactListView(QWidget *parent) : QListView(parent)
     auto oldDelegate = itemDelegate();
     setItemDelegate(new ContactListDelegate(this));
     delete oldDelegate;
+
+    QObject::connect(roster, &Roster::itemAdded,
+        [&](QSharedPointer<Jreen::RosterItem> item)
+        {
+            model()->add(item->name(), roster->getPresenceText(item->jid()), QByteArray(), QString());
+        }
+    );
 }
 
 ContactListView::~ContactListView()

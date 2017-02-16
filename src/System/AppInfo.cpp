@@ -24,3 +24,18 @@ QString AppInfo::getDataDir()
     // Return path to default config dir
     return QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
 }
+
+QString AppInfo::getAppName()
+{
+    return "juzen";
+}
+
+QString AppInfo::getAppFullName()
+{
+    return QString("%1 v%2").arg(AppInfo::getAppName(), AppInfo::getAppVersion());
+}
+
+QString AppInfo::getAppVersion()
+{
+    return "0.1";
+}

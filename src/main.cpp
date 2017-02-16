@@ -1,16 +1,14 @@
 #include "AccountManager.h"
-#include "Widgets/ContactListView.h"
-#include "Widgets/ContactListModel.h"
-
-#include <jreen/vcardmanager.h>
+#include "MainWindow.h"
+#include "System/AppInfo.h"
 
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName("juzen");
-    app.setApplicationVersion("0.1");
+    app.setApplicationName(AppInfo::getAppName());
+    app.setApplicationVersion(AppInfo::getAppVersion());
 
     auto palette = app.palette();
     palette.setColor(QPalette::Background, Qt::white);
@@ -21,22 +19,8 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    ContactListView clv;
-    auto vcm = new Jreen::VCardManager(am.getActiveAccount()->getClient());
-    auto roster = am.getActiveAccount()->getRoster();
-
-    QObject::connect(roster, &Roster::itemAdded, [&](QSharedPointer<Jreen::RosterItem> item)
-    {
-        vcm->fetch(item->jid());
-
-    });
-    QObject::connect(vcm, &Jreen::VCardManager::vCardFetched, [&](const Jreen::VCard::Ptr &vcard, const Jreen::JID &jid)
-    {
-        clv.model()->add(vcard->formattedName(), roster->getPresenceText(jid.bare()), vcard->photo().data(), vcard->photo().mimeType());
-    });
-
-    clv.show();
+    MainWindow mw(am.getActiveAccount());
+    mw.show();
 
     return app.exec();
 }
-
