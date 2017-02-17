@@ -16,6 +16,10 @@ public:
     ContactListModel *model();
 
 private:
+    void initRosterConnections();
+
+    void addContact(Contact::Ptr contact);
+
     Roster *roster;
 };
 

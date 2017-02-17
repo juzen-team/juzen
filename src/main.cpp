@@ -2,6 +2,7 @@
 #include "MainWindow.h"
 #include "System/AppInfo.h"
 
+#include <QtCore/QTime>
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
@@ -13,6 +14,9 @@ int main(int argc, char *argv[])
     auto palette = app.palette();
     palette.setColor(QPalette::Background, Qt::white);
     app.setPalette(palette);
+
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
 
     AccountManager am;
     if (!am.getActiveAccount()) {

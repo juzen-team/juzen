@@ -1,3 +1,4 @@
+#include "Roster/Contact.h"
 #include "Widgets/ContactListDelegate.h"
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
@@ -36,18 +37,19 @@ void ContactListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
     photoRect.setRight(photoRect.left() + 40);
     photoRect.setBottom(photoRect.top() + 40);
 
+    Contact::Ptr contact = index.data(Qt::UserRole).value<Contact::Ptr>();
+
     painter->setFont(nameFont);
-    painter->drawText(nameRect, index.data(Qt::UserRole).toString());
+    painter->drawText(nameRect, contact->getName());
 
     painter->setFont(statusFont);
-    painter->drawText(statusRect, index.data(Qt::UserRole + 1).toString());
+    painter->drawText(statusRect, contact->getPresenceText());
 
     QPainterPath path;
     path.addEllipse(photoRect);
     painter->setClipPath(path);
 
-    QPixmap photo;
-    photo.loadFromData(index.data(Qt::UserRole + 2).toByteArray(), index.data(Qt::UserRole + 3).toString().toLatin1().data());
+    QPixmap photo = contact->getPhoto();
     photo = photo.scaledToHeight(40, Qt::SmoothTransformation);
     painter->drawPixmap(photoRect, photo);
 

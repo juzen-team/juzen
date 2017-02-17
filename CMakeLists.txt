@@ -39,6 +39,8 @@ set(SOURCE_FILES
     src/main.cpp
     src/Roster/Roster.cpp
     src/Roster/Roster.h
+    src/Roster/Contact.cpp
+    src/Roster/Contact.h
     src/System/AppInfo.cpp
     src/System/AppInfo.h
     src/System/Settings.cpp

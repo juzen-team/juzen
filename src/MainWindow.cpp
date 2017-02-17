@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(Account *account, QWidget *parent) : QWidget(parent), account(account)
 {
-    setAttribute(Qt::WA_QuitOnClose, false);
+    //setAttribute(Qt::WA_QuitOnClose, false);
     setWindowTitle(AppInfo::getAppFullName());
 
     auto layout = new QGridLayout(this);
