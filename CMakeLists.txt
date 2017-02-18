@@ -41,6 +41,8 @@ set(SOURCE_FILES
     src/Roster/Roster.h
     src/Roster/Contact.cpp
     src/Roster/Contact.h
+    src/Roster/ContactResource.cpp
+    src/Roster/ContactResource.h
     src/System/AppInfo.cpp
     src/System/AppInfo.h
     src/System/Settings.cpp

@@ -27,6 +27,12 @@ void ContactListModel::add(const Contact::Ptr &contact)
     beginInsertRows(QModelIndex(), contacts.size(), contacts.size());
     contacts[contact->getJid()] = contact;
     endInsertRows();
+    connect(contact.data(), &Contact::contactChanged,
+        [this](const QString &jid)
+        {
+            change(jid);
+        }
+    );
 }
 
 void ContactListModel::change(const QString &jid)

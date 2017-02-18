@@ -25,8 +25,6 @@ public:
     Roster *getRoster();
 
 private:
-    void onConnected();
-
     Jreen::Client client;
     Roster roster;
 

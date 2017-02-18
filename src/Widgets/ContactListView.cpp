@@ -34,23 +34,9 @@ void ContactListView::initRosterConnections()
             addContact(contact);
         }
     );
-    connect(roster, &Roster::loaded,
-        [&](Roster::ContactsMap contacts)
-        {
-            for (auto contact : contacts) {
-                addContact(contact);
-            }
-        }
-    );
 }
 
 void ContactListView::addContact(Contact::Ptr contact)
 {
     model()->add(contact);
-    connect(contact.data(), &Contact::contactChanged,
-        [this](const QString &jid)
-        {
-            model()->change(jid);
-        }
-    );
 }

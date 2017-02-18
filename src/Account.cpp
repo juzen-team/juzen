@@ -7,7 +7,18 @@ Account::Account(const QString &jid) : roster(this)
     disco->setSoftwareVersion("Juzen", "0.1");
     disco->addIdentity(Jreen::Disco::Identity("client", "type", "Juzen"));
     
-    connect(&client, &Jreen::Client::connected, this, &Account::onConnected);
+    connect(&client, &Jreen::Client::connected,
+        [this]()
+        {
+            roster.load();
+        }
+    );
+    connect(&roster, &Roster::loaded,
+        [this]()
+        {
+            client.setPresence(Jreen::Presence::Available);
+        }
+    );
 
     loadAccount(jid);
 }
@@ -62,10 +73,4 @@ Jreen::Client *Account::getClient()
 Roster *Account::getRoster()
 {
     return &roster;
-}
-
-void Account::onConnected()
-{
-    client.setPresence(Jreen::Presence::Available);
-    roster.load();
 }

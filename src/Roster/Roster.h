@@ -18,13 +18,11 @@ public:
 
 signals:
     void contactAdded(Contact::Ptr contact);
-    void loaded(const ContactsMap &contacts);
 
 private:
     void onItemAdded(Jreen::RosterItem::Ptr item) override;
     void onItemUpdated(Jreen::RosterItem::Ptr item) override;
     void onItemRemoved(const QString &jid) override;
-    void onLoaded(const QList<Jreen::RosterItem::Ptr> &items) override;
     void onPresenceReceived(const Jreen::Presence &presence);
 
     void onVCardFetched(const Jreen::VCard::Ptr &vcard, const Jreen::JID &jid);

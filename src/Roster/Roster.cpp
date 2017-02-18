@@ -34,47 +34,15 @@ void Roster::onItemRemoved(const QString &jid)
     qDebug() << "item removed: " << jid;
 }
 
-void Roster::onLoaded(const QList<Jreen::RosterItem::Ptr> &items)
-{
-    for (auto item : items) {
-        addItem(item);
-    }
-    emit loaded(contacts);
-}
-
 void Roster::onPresenceReceived(const Jreen::Presence &presence)
 {
-    /*if (presence.isSubscription()) {
-        std::cout << "subscriptionReceived (from: " << presence.from().full().toStdString() << "): " << presence.subtype() << std::endl;
+    if (presence.isSubscription()) {
     } else {
-        switch (presence.subtype()) {
-            case Jreen::Presence::Unavailable:
-                textPresence = "Offline";
-                break;
-            case Jreen::Presence::Available:
-                textPresence = "Online";
-                break;
-
-            case Jreen::Presence::Chat:
-                textPresence = "Available for chat";
-                break;
-
-            case Jreen::Presence::Away:
-                textPresence = "Away";
-                break;
-
-            case Jreen::Presence::DND:
-                textPresence = "Do not disturb";
-                break;
-
-            case Jreen::Presence::XA:
-                textPresence = "Not available";
-                break;
-
-            default:
-                textPresence = "Unknown";
+        if (!contacts.contains(presence.from().bare())) {
+            return;
         }
-    }*/
+        contacts[presence.from().bare()]->presenceReceived(presence);
+    }
 }
 
 void Roster::onVCardFetched(const Jreen::VCard::Ptr &vcard, const Jreen::JID &jid)
@@ -82,7 +50,6 @@ void Roster::onVCardFetched(const Jreen::VCard::Ptr &vcard, const Jreen::JID &ji
     if (!contacts.contains(jid.bare())) {
         return;
     }
-
     contacts[jid.bare()]->vCardFetched(vcard);
 }
 
