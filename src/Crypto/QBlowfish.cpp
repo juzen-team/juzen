@@ -84,6 +84,9 @@ QByteArray QBlowfish::decrypted(const QByteArray &cipherText)
     if (cipherText.isEmpty()) {
         return QByteArray();
     }
+    if (cipherText.size() % 8 != 0) {
+        return QByteArray();
+    }
 
     Q_ASSERT(cipherText.size() % 8 == 0);
     if ((cipherText.size() % 8 == 0) && init()) {
