@@ -25,7 +25,7 @@ QVariant ContactListModel::data(const QModelIndex &index, int role) const
 void ContactListModel::add(const Contact::Ptr &contact)
 {
     beginInsertRows(QModelIndex(), contacts.size(), contacts.size());
-    contacts[contact->getJid()] = contact;
+    contacts[contact->jid()] = contact;
     endInsertRows();
     connect(contact.data(), &Contact::contactChanged,
         [this](const QString &jid)

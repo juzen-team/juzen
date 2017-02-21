@@ -1,0 +1,11 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+    <file alias="presences/available.png">icons/presences/available.png</file>
+    <file alias="presences/away.png">icons/presences/away.png</file>
+    <file alias="presences/chat.png">icons/presences/chat.png</file>
+    <file alias="presences/dnd.png">icons/presences/dnd.png</file>
+    <file alias="presences/unavailable.png">icons/presences/unavailable.png</file>
+    <file alias="presences/xa.png">icons/presences/xa.png</file>
+</qresource>
+</RCC>

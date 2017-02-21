@@ -34,6 +34,7 @@ QString ContactResource::presenceText() const
     switch (jpresence.subtype()) {
         case Jreen::Presence::Unavailable:
             return "Offline";
+
         case Jreen::Presence::Available:
             return "Online";
 

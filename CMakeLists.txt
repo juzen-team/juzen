@@ -32,7 +32,8 @@ find_package(Jellow REQUIRED)
 if (NOT JELLOW_FOUND)
     message(FATAL_ERROR "Jellow not found!")
 endif()
-
+    
+QT5_ADD_RESOURCES(RESOURCE_FILES "resources/juzen.qrc")
 include_directories("src/" ${JELLOW_INCLUDE_DIRS})
 
 set(SOURCE_FILES
@@ -74,7 +75,7 @@ set(SOURCE_FILES
     src/Widgets/AccountRegisterFormWizardPage.cpp
     src/Widgets/AccountRegisterFormWizardPage.h)
 
-add_executable(juzen ${SOURCE_FILES})
+add_executable(juzen ${SOURCE_FILES} ${RESOURCE_FILES})
 set_target_properties(juzen PROPERTIES
         CXX_STANDARD 14
         CXX_STANDARD_REQUIRED ON

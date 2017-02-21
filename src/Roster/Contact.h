@@ -15,14 +15,14 @@ class Contact: public QObject
 public:
     using Ptr = QSharedPointer<Contact>;
 
-    Contact(Jreen::RosterItem::Ptr &rosterItem, Roster *roster);
+    Contact(Jreen::RosterItem::Ptr &rosterItem, QObject *parent = Q_NULLPTR);
     virtual ~Contact();
 
-    QString getJid() const;
+    QString jid() const;
+    QString name() const;
+    QPixmap photo() const;
 
-    QString getName() const;
-    QString getPresenceText() const;
-    QPixmap getPhoto() const;
+    ContactResource::Ptr mainResource() const;
 
     void presenceReceived(const Jreen::Presence &presence);
     void vCardFetched(const Jreen::VCard::Ptr &vcard);
@@ -33,16 +33,13 @@ signals:
 private:
     void addOrChangeResource(const Jreen::Presence &presence);
     void removeResource(const QString &resource);
-    
-    void generatePhoto();
+
+    QPixmap generateNoPhotoReplacement() const;
+    QPixmap contactPhoto = generateNoPhotoReplacement();
 
     Jreen::RosterItem::Ptr rosterItem;
-    Roster *roster;
-
     QVector<ContactResource::Ptr> resources;
-
-    QString name;
-    QPixmap photo;
+    Jreen::VCard::Ptr vcard;
 };
 Q_DECLARE_METATYPE(Contact::Ptr)
 

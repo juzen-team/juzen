@@ -9,7 +9,6 @@ Roster::Roster(Account *account) : AbstractRoster(account->getClient()),
                                    vcardmgr(account->getClient())
 {
     connect(account->getClient(), &Jreen::Client::presenceReceived, this, &Roster::onPresenceReceived);
-
     connect(&vcardmgr, &Jreen::VCardManager::vCardFetched, this, &Roster::onVCardFetched);
     connect(&vcardmgr, &Jreen::VCardManager::vCardUpdateDetected, this, &Roster::onVCardUpdateDetected);
 }
