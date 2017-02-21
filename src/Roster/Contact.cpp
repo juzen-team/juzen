@@ -51,7 +51,9 @@ ContactResource::Ptr Contact::mainResource() const
 void Contact::presenceReceived(const Jreen::Presence &presence)
 {
     if (presence.subtype() == Jreen::Presence::Unavailable) {
-        removeResource(presence.from().resource());
+        if (resources.size() > 0) {
+            removeResource(presence.from().resource());
+        }
     } else {
         addOrChangeResource(presence);
     }

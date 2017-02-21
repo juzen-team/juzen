@@ -3,13 +3,17 @@
 
 #include "Roster/Contact.h"
 #include <QtCore/QAbstractListModel>
-#include <QtCore/QMap>
+#include <QtCore/QVector>
 
 class ContactListModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
+    enum class SortType {
+        Roster
+    };
+
     ContactListModel(QObject *parent = Q_NULLPTR);
     ~ContactListModel();
 
@@ -19,8 +23,13 @@ public:
     void add(const Contact::Ptr &contact);
     void change(const QString &jid);
 
+    void setSortType(SortType sortType);
+
 private:
-    QMap<QString, Contact::Ptr> contacts;
+    void sort();
+
+    QVector<Contact::Ptr> contacts;
+    SortType sortType = SortType::Roster;
 };
 
 #endif //JUZEN_CONTACTLISTMODEL_H
