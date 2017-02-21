@@ -61,7 +61,8 @@ void Contact::presenceReceived(const Jreen::Presence &presence)
 
 void Contact::vCardFetched(const Jreen::VCard::Ptr &vcard)
 {
-    //contactPhoto.loadFromData(vcard->photo().data(), vcard->photo().mimeType().toLatin1().data());
+    contactPhoto.loadFromData(vcard->photo().data(), vcard->photo().mimeType().toLatin1().data());
+    this->vcard = vcard;
     emit contactChanged(jid());
 }
 
