@@ -23,6 +23,7 @@ public:
     QPixmap photo() const;
 
     ContactResource::Ptr mainResource() const;
+    QVector<ContactResource::Ptr> allResources() const;
 
     void presenceReceived(const Jreen::Presence &presence);
     void vCardFetched(const Jreen::VCard::Ptr &vcard);

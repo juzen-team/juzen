@@ -48,6 +48,11 @@ ContactResource::Ptr Contact::mainResource() const
     return resources[0];
 }
 
+QVector<ContactResource::Ptr> Contact::allResources() const
+{
+    return resources;
+}
+
 void Contact::presenceReceived(const Jreen::Presence &presence)
 {
     if (presence.subtype() == Jreen::Presence::Unavailable) {

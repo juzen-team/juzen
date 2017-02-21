@@ -17,6 +17,15 @@ int ContactListModel::rowCount(const QModelIndex &/*parent*/) const
 
 QVariant ContactListModel::data(const QModelIndex &index, int role) const
 {
+    if (role == Qt::ToolTipRole) {
+        auto contact = contacts[index.row()];
+
+        auto tooltip = QString("<b>%1</b> (%2)<br />").arg(contact->name(), contact->jid());
+        for (auto &resource : contact->allResources()) {
+            tooltip += QString("<b>%1</b> (%2): %3<br />").arg(resource->resource(), QString::number(resource->presence().priority()), resource->presenceText());
+        }
+        return tooltip;
+    }
     if (role == Qt::UserRole) {
         return QVariant::fromValue(contacts[index.row()]);
     }
