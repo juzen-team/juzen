@@ -10,6 +10,7 @@
 Contact::Contact(Jreen::RosterItem::Ptr &rosterItem, QObject *parent) : QObject(parent),
                                                                         rosterItem(rosterItem)
 {
+    contactPhoto = generateNoPhotoReplacement();
 }
 
 Contact::~Contact()
@@ -23,12 +24,15 @@ QString Contact::jid() const
 
 QString Contact::name() const
 {
-    if (vcard.isNull()) {
+    if (vcard) {
+        return vcard->formattedName();
+    }
+
+    if (rosterItem) {
         return rosterItem->name();
     }
 
-    return "name";
-    //return vcard->formattedName();
+    return QString();    
 }
 
 QPixmap Contact::photo() const
@@ -95,7 +99,7 @@ QPixmap Contact::generateNoPhotoReplacement() const
     auto colorNames = QColor::colorNames();
     colorNames.removeAll("black");
     colorNames.removeAll("white");
-    auto randColorName = colorNames[qrand() % (colorNames.size() + 1)];
+    auto randColorName = colorNames[qrand() % colorNames.size()];
 
     QRect rect(0, 0, replacementPhoto.width(), replacementPhoto.height());
     painter.fillRect(rect, QBrush(QColor(randColorName)));

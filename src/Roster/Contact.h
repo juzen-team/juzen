@@ -35,7 +35,7 @@ private:
     void removeResource(const QString &resource);
 
     QPixmap generateNoPhotoReplacement() const;
-    QPixmap contactPhoto = generateNoPhotoReplacement();
+    QPixmap contactPhoto;
 
     Jreen::RosterItem::Ptr rosterItem;
     QVector<ContactResource::Ptr> resources;
