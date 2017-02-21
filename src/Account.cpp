@@ -1,6 +1,7 @@
 #include "Account.h"
 #include "Crypto/QBlowfish.h"
 #include <QtWidgets/QInputDialog>
+#include <QtWidgets/QMessageBox>
 
 Account::Account(const QString &jid) : roster(this)
 {
@@ -12,6 +13,34 @@ Account::Account(const QString &jid) : roster(this)
         [this]()
         {
             roster.load();
+        }
+    );
+    connect(&client, &Jreen::Client::disconnected,
+        [this](Jreen::Client::DisconnectReason reason)
+        {
+            switch (reason) {
+                case Jreen::Client::User:
+                    break;
+
+                case Jreen::Client::AuthorizationError:
+                    QMessageBox::critical(nullptr, "Connection failed", "Wrong username or password.");
+                    break;
+
+                case Jreen::Client::HostUnknown:
+                case Jreen::Client::ItemNotFound:
+                case Jreen::Client::SystemShutdown:
+                case Jreen::Client::NoSupportedFeature:
+                case Jreen::Client::NoAuthorizationSupport:
+                case Jreen::Client::NoEncryptionSupport:
+                case Jreen::Client::NoCompressionSupport:
+                case Jreen::Client::RemoteStreamError:
+                case Jreen::Client::RemoteConnectionFailed:
+                case Jreen::Client::InternalServerError:
+                case Jreen::Client::Conflict:
+                case Jreen::Client::Unknown:
+                    QMessageBox::critical(nullptr, "Connection failed", "Unknown connection error.");
+                    break;
+            }
         }
     );
     connect(&roster, &Roster::loaded,
