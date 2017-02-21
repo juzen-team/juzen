@@ -16,7 +16,9 @@ public:
     Account(const QString &jid = QString());
     virtual ~Account();
 
+    void createAccount(const QString &jid, const QString &password, int port);
     void loadAccount(const QString &jid);
+
     bool isNull() const;
 
     void connectToServer();
@@ -25,6 +27,9 @@ public:
     Roster *getRoster();
 
 private:
+    QString encryptPassword(const QString &password);
+    QString decryptPassword(const QString &crypted);
+
     Jreen::Client client;
     Roster roster;
 

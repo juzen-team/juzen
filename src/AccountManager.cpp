@@ -32,9 +32,8 @@ bool AccountManager::addExistingAccount(const QString &jid, const QString &passw
         return false;
     }
 
-    Settings accountSettings(QString("accounts/%1/config").arg(jid));
-    accountSettings.set("password", password);
-    accountSettings.set("port", port);
+    Account newAccount;
+    newAccount.createAccount(jid, password, port);
 
     Settings settings("config");
     settings.set("active_account", jid);

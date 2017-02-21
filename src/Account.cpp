@@ -1,4 +1,5 @@
 #include "Account.h"
+#include "Crypto/QBlowfish.h"
 #include <QtWidgets/QInputDialog>
 
 Account::Account(const QString &jid) : roster(this)
@@ -27,6 +28,15 @@ Account::~Account()
 {
 }
 
+void Account::createAccount(const QString &jid, const QString &password, int port)
+{
+    this->jid = jid;
+
+    Settings settings(QString("accounts/%1/config").arg(jid));
+    settings.set("password", encryptPassword(password));
+    settings.set("port", port);
+}
+
 void Account::loadAccount(const QString &jid)
 {
     if (jid.isEmpty()) {
@@ -41,7 +51,7 @@ void Account::loadAccount(const QString &jid)
         bool ok;
         password = QInputDialog::getText(nullptr, "Enter password", QString("Please, enter password for account %1:").arg(jid), QLineEdit::PasswordEchoOnEdit, QString(), &ok);
         if (ok && !password.isEmpty()) {
-            settings.set<QString>("password", password);
+            settings.set<QString>("password", encryptPassword(password));
         } else {
             return;
         }
@@ -49,7 +59,7 @@ void Account::loadAccount(const QString &jid)
     this->jid = jid;
 
     client.setJID(jid);
-    client.setPassword(password);
+    client.setPassword(decryptPassword(password));
     if (port != -1) {
         client.setPort(port);
     }   
@@ -73,4 +83,18 @@ Jreen::Client *Account::getClient()
 Roster *Account::getRoster()
 {
     return &roster;
+}
+
+QString Account::encryptPassword(const QString &password)
+{
+    QBlowfish blowfish(jid.toUtf8());
+    blowfish.setPaddingEnabled(true);
+    return blowfish.encrypted(password.toUtf8()).toHex();
+}
+
+QString Account::decryptPassword(const QString &crypted)
+{
+    QBlowfish blowfish(jid.toUtf8());
+    blowfish.setPaddingEnabled(true);
+    return QString::fromUtf8(blowfish.decrypted(QByteArray::fromHex(crypted.toLatin1())));
 }
