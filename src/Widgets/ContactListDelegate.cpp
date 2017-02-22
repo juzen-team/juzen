@@ -67,18 +67,8 @@ void ContactListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
         painter->drawText(statusRect, resource->presenceText());
     }
 
-    QPainterPath path;
-    path.addEllipse(photoRect);
-    painter->setClipPath(path);
-
-    QPixmap photo = contact->photo();
-    photo = photo.scaledToHeight(photoSize, Qt::SmoothTransformation);
-    painter->drawPixmap(photoRect, photo);
-
-    painter->setClipping(false);
-
+    QPixmap presenceIcon;
     if (!resource.isNull()) {
-        QPixmap presenceIcon;
         switch (resource->presenceType()) {
             case Jreen::Presence::Available:
                 presenceIcon = QPixmap(":/presences/available.png");
@@ -104,15 +94,26 @@ void ContactListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
             default:
                 break;
         }
+    }
 
-        if (!presenceIcon.isNull()) {
-            painter->setPen(Qt::NoPen);
-            painter->setBrush(QBrush("white"));
-            painter->drawEllipse(presenceRingRect);
+    QPainterPath path;
+    path.addEllipse(photoRect);
+    if (!presenceIcon.isNull()) {
+        QPainterPath excludePath;
+        excludePath.addEllipse(presenceRingRect);
+        path = path.subtracted(excludePath);
+    }
+    painter->setClipPath(path);
 
-            presenceIcon = presenceIcon.scaledToHeight(presenceSize, Qt::SmoothTransformation);
-            painter->drawPixmap(presenceRect, presenceIcon);
-        }
+    QPixmap photo = contact->photo();
+    photo = photo.scaledToHeight(photoSize, Qt::SmoothTransformation);
+    painter->drawPixmap(photoRect, photo);
+
+    painter->setClipping(false);
+
+    if (!presenceIcon.isNull()) {
+        presenceIcon = presenceIcon.scaledToHeight(presenceSize, Qt::SmoothTransformation);
+        painter->drawPixmap(presenceRect, presenceIcon);
     }
 
     painter->restore();
