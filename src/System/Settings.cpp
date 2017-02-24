@@ -13,35 +13,35 @@ Settings::Settings(const QString &path, bool relative)
 
 void Settings::setPath(const QString &path)
 {
-    configFile.setFileName(path);
+    m_configFile.setFileName(path);
     readSettings();
 }
 
 void Settings::setRelativeConfigPath(const QString &path)
 {
-    configFile.setFileName(QString("%1/%2.json").arg(AppInfo::getDataDir(), path));
+    m_configFile.setFileName(QString("%1/%2.json").arg(AppInfo::dataDir(), path));
     readSettings();
 }
 
 void Settings::readSettings()
 {
-    if (!configFile.open(QIODevice::ReadOnly)) {
+    if (!m_configFile.open(QIODevice::ReadOnly)) {
         return;
     }
     
-    auto json = QJsonDocument::fromJson(configFile.readAll());
-    configFile.close();
+    auto json = QJsonDocument::fromJson(m_configFile.readAll());
+    m_configFile.close();
     
-    config = json.toVariant();
+    m_config = json.toVariant();
 }
 
 void Settings::writeSettings()
 {
-    if (!configFile.open(QIODevice::WriteOnly)) {
+    if (!m_configFile.open(QIODevice::WriteOnly)) {
         return;
     }
     
-    auto json = QJsonDocument::fromVariant(config);
-    configFile.write(json.toJson());
-    configFile.close();
+    auto json = QJsonDocument::fromVariant(m_config);
+    m_configFile.write(json.toJson());
+    m_configFile.close();
 }

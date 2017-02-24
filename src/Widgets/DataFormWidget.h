@@ -18,10 +18,10 @@ public:
 
     bool allRequiredFieldsFilled() const;
 
-    Jreen::DataForm::Ptr getDataForm();
+    Jreen::DataForm::Ptr dataForm();
 
 private:
-    Jreen::DataForm::Ptr form;
+    Jreen::DataForm::Ptr m_form;
 };
 
 #endif //JUZEN_DATAFORMWIDGET_H

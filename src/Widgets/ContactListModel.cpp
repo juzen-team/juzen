@@ -12,13 +12,13 @@ ContactListModel::~ContactListModel()
 
 int ContactListModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    return contacts.size();
+    return m_contacts.size();
 }
 
 QVariant ContactListModel::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::ToolTipRole) {
-        auto contact = contacts[index.row()];
+        auto contact = m_contacts[index.row()];
 
         auto tooltip = QString("<b>%1</b> (%2)<br />").arg(contact->name(), contact->jid());
         for (auto &resource : contact->allResources()) {
@@ -27,15 +27,15 @@ QVariant ContactListModel::data(const QModelIndex &index, int role) const
         return tooltip;
     }
     if (role == Qt::UserRole) {
-        return QVariant::fromValue(contacts[index.row()]);
+        return QVariant::fromValue(m_contacts[index.row()]);
     }
     return QVariant();
 }
 
 void ContactListModel::add(const Contact::Ptr &contact)
 {
-    beginInsertRows(QModelIndex(), contacts.size(), contacts.size());
-    contacts.push_back(contact);
+    beginInsertRows(QModelIndex(), m_contacts.size(), m_contacts.size());
+    m_contacts.push_back(contact);
     endInsertRows();
     sort();
 
@@ -49,17 +49,17 @@ void ContactListModel::add(const Contact::Ptr &contact)
 
 void ContactListModel::change(const QString &jid)
 {
-    auto it = std::find_if(contacts.cbegin(), contacts.cend(),
+    auto it = std::find_if(m_contacts.cbegin(), m_contacts.cend(),
         [&jid](const Contact::Ptr contact)
         {
             return contact->jid() == jid;
         }
     );
-    if (it == contacts.cend()) {
+    if (it == m_contacts.cend()) {
         return;
     }
 
-    QModelIndex mindex = index(std::distance(contacts.cbegin(), it));
+    QModelIndex mindex = index(std::distance(m_contacts.cbegin(), it));
     emit dataChanged(mindex, mindex);
 
     sort();
@@ -67,7 +67,7 @@ void ContactListModel::change(const QString &jid)
 
 void ContactListModel::setSortType(ContactListModel::SortType sortType)
 {
-    this->sortType = sortType;
+    this->m_sortType = sortType;
 }
 
 void ContactListModel::sort()
@@ -114,6 +114,6 @@ void ContactListModel::sort()
         };
 
     emit layoutAboutToBeChanged();
-    std::sort(contacts.begin(), contacts.end(), sortTypeRoster);
+    std::sort(m_contacts.begin(), m_contacts.end(), sortTypeRoster);
     emit layoutChanged();
 }

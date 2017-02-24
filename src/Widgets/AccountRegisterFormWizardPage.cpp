@@ -24,40 +24,40 @@ void AccountRegisterFormWizardPage::initializePage()
     if (!initialized) {
         initialized = true;
 
-        connect(wizard()->getAccountManager(), &AccountManager::registrationFormReceived,
+        connect(wizard()->accountManager(), &AccountManager::registrationFormReceived,
             [this](const Jreen::RegistrationData &data) {
-                auto oldDfw = dfw;
-                dfw = new DataFormWidget(data.form(), data.bitsOfBinaries(), oldDfw, this);
+                auto oldDfw = m_dataFormWidget;
+                m_dataFormWidget = new DataFormWidget(data.form(), data.bitsOfBinaries(), oldDfw, this);
 
                 clearLayout();
-                layout()->addWidget(dfw);
+                layout()->addWidget(m_dataFormWidget);
                 setSubTitle(data.form()->instructions());
             }
         );
 
-        connect(wizard()->getAccountManager(), &AccountManager::registrationSuccess,
+        connect(wizard()->accountManager(), &AccountManager::registrationSuccess,
             [this]() {
                 if (!wizard()->property("name").toString().isEmpty()) {
                     QString jid = wizard()->property("name").toString();
                     if (!jid.contains('@')) {
                         jid += QString("@%1").arg(wizard()->property("server").toString());
                     }
-                    wizard()->getAccountManager()->addExistingAccount(jid, wizard()->property("password").toString());
+                    wizard()->accountManager()->addExistingAccount(jid, wizard()->property("password").toString());
                 }
-                registrationSuccess = true;
+                m_registrationSuccess = true;
                 wizard()->next();
             }
         );
 
-        connect(wizard()->getAccountManager(), &AccountManager::registrationError,
+        connect(wizard()->accountManager(), &AccountManager::registrationError,
             [this](const QString &errorStr) {
                 QMessageBox::critical(this, "Registration failed", errorStr);
-                dfw->hide();
+                m_dataFormWidget->hide();
                 performRequest();
             }
         );
 
-        connect(wizard()->getAccountManager(), &AccountManager::registrationUnsupported,
+        connect(wizard()->accountManager(), &AccountManager::registrationUnsupported,
             [this]() {
                 clearLayout();
                 layout()->addWidget(new QLabel("Sorry, this server doesn't support in-band registeration.", this));
@@ -72,29 +72,29 @@ void AccountRegisterFormWizardPage::initializePage()
 void AccountRegisterFormWizardPage::cleanupPage()
 {
     clearLayout();
-    dfw = nullptr;
+    m_dataFormWidget = nullptr;
 }
 
 bool AccountRegisterFormWizardPage::isComplete() const
 {
-    return pageComplete;
+    return m_pageComplete;
 }
 
 bool AccountRegisterFormWizardPage::validatePage()
 {
-    if (registrationSuccess) {
+    if (m_registrationSuccess) {
         return true;
     }
 
-    if (!dfw->allRequiredFieldsFilled()) {
+    if (!m_dataFormWidget->allRequiredFieldsFilled()) {
         QMessageBox::critical(this, "Error", "Please fill all required fields.");
         return false;
     }
 
     setPageComplete(false);
-    wizard()->setProperty("name", dfw->getDataForm()->field("username").value());
-    wizard()->setProperty("password", dfw->getDataForm()->field("password").value());
-    wizard()->getAccountManager()->submitRegisterForm(dfw->getDataForm());
+    wizard()->setProperty("name", m_dataFormWidget->dataForm()->field("username").value());
+    wizard()->setProperty("password", m_dataFormWidget->dataForm()->field("password").value());
+    wizard()->accountManager()->submitRegisterForm(m_dataFormWidget->dataForm());
 
     return false;
 }
@@ -120,11 +120,11 @@ void AccountRegisterFormWizardPage::performRequest()
 {
     setPageComplete(false);
     layout()->addWidget(new QLabel("Please, wait while register form loading...", this));
-    wizard()->getAccountManager()->getRegisterForm(wizard()->property("server").toString());
+    wizard()->accountManager()->getRegisterForm(wizard()->property("server").toString());
 }
 
 void AccountRegisterFormWizardPage::setPageComplete(bool complete)
 {
-    pageComplete = complete;
+    m_pageComplete = complete;
     emit completeChanged();
 }

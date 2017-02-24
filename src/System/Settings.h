@@ -17,8 +17,8 @@ public:
     template<typename T>
     T get(const QString &key, const T &defaultValue = T())
     {
-        if (config.type() == QVariant::List) {
-            auto list = config.toList();
+        if (m_config.type() == QVariant::List) {
+            auto list = m_config.toList();
             int index = key.toInt();
             
             if (index >= list.count()) {
@@ -28,8 +28,8 @@ public:
             return list.at(index).template value<T>();
         }
         
-        if (config.type() == QVariant::Map) {
-            auto map = config.toMap();
+        if (m_config.type() == QVariant::Map) {
+            auto map = m_config.toMap();
             return map.value(key, defaultValue).template value<T>();
         }
         
@@ -39,8 +39,8 @@ public:
     template<typename T>
     void set(const QString &key, const T &value)
     {
-        if (config.type() == QVariant::List) {
-            auto list = config.toList();
+        if (m_config.type() == QVariant::List) {
+            auto list = m_config.toList();
             int index = key.toInt();
             
             if (index >= list.count()) {
@@ -49,14 +49,14 @@ public:
                 list[index] = value;
             }
             
-            config = list;
+            m_config = list;
         } else {
             QMap<QString, QVariant> map;
-            if (config.type() == QVariant::Map) {
-                map = config.toMap();
+            if (m_config.type() == QVariant::Map) {
+                map = m_config.toMap();
             }
             map[key] = value;
-            config = map;
+            m_config = map;
         }
         
         writeSettings();
@@ -70,8 +70,8 @@ private:
     void readSettings();
     void writeSettings();
     
-    QFile configFile;
-    QVariant config;
+    QFile m_configFile;
+    QVariant m_config;
 };
 
 #endif //JUZEN_SETTINGS_H

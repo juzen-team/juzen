@@ -18,7 +18,7 @@ public:
     void getRegisterForm(const QString &server);
     void submitRegisterForm(const Jreen::DataForm::Ptr &form);
 
-    Account *getActiveAccount();
+    Account *activeAccount();
 
 signals:
     void registrationFormReceived(const Jreen::RegistrationData &data);
@@ -33,10 +33,10 @@ private:
     void createRegistrationObjects(const QString &server);
     void deleteRegistrationObjects();
     
-    Account account;
+    Account m_account;
 
-    Jreen::Client *registrationClient = nullptr;
-    Jreen::RegistrationManager *registrationManager = nullptr;
+    Jreen::Client *m_registrationClient = nullptr;
+    Jreen::RegistrationManager *m_registrationManager = nullptr;
 };
 
 #endif //JUZEN_ACCOUNTMANAGER_H

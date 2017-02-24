@@ -2,7 +2,7 @@
 #include "Widgets/ContactListDelegate.h"
 #include "Widgets/ContactListModel.h"
 
-ContactListView::ContactListView(Roster *roster, QWidget *parent) : QListView(parent), roster(roster)
+ContactListView::ContactListView(Roster *roster, QWidget *parent) : QListView(parent), m_roster(roster)
 {
     setEditTriggers(QAbstractItemView::NoEditTriggers);
 
@@ -28,7 +28,7 @@ ContactListModel *ContactListView::model()
 
 void ContactListView::initRosterConnections()
 {
-    connect(roster, &Roster::contactAdded,
+    connect(m_roster, &Roster::contactAdded,
         [&](Contact::Ptr contact)
         {
             addContact(contact);

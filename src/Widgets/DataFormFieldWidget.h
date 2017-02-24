@@ -21,8 +21,8 @@ private:
     void generateText(const QVariant &value, QVBoxLayout *layout);
     void generateMedia(QVBoxLayout *layout);
 
-    Jreen::DataFormField field;
-    QMapBobs bobsMap;
+    Jreen::DataFormField m_field;
+    QMapBobs m_bobsMap;
 };
 
 #endif //JUZEN_DATAFORMFIELDWIDGET_H

@@ -20,9 +20,9 @@ protected:
     AccountAddWizard *wizard() const;
 
 private:
-    QString jid;
-    QString password;
-    int port;
+    QString m_jid;
+    QString m_password;
+    int m_port;
 };
 
 #endif //JUZEN_ACCOUNTADDEXISTINGWIZARDPAGE_H

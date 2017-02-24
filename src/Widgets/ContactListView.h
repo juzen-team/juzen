@@ -20,7 +20,7 @@ private:
 
     void addContact(Contact::Ptr contact);
 
-    Roster *roster;
+    Roster *m_roster;
 };
 
 #endif //JUZEN_CONTACTLISTVIEW_H

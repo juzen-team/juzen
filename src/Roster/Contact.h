@@ -35,12 +35,12 @@ private:
     void addOrChangeResource(const Jreen::Presence &presence);
     void removeResource(const QString &resource);
 
-    QPixmap generateNoPhotoReplacement() const;
+    QPixmap generateNoPhotoFiller() const;
     QPixmap contactPhoto;
 
-    Jreen::RosterItem::Ptr rosterItem;
-    QVector<ContactResource::Ptr> resources;
-    Jreen::VCard::Ptr vcard;
+    Jreen::RosterItem::Ptr m_rosterItem;
+    QVector<ContactResource::Ptr> m_resources;
+    Jreen::VCard::Ptr m_vcard;
 };
 Q_DECLARE_METATYPE(Contact::Ptr)
 

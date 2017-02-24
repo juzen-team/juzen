@@ -13,7 +13,7 @@ class Roster : public Jreen::AbstractRoster
 public:
     using ContactsMap = QMap<QString, Contact::Ptr>;
 
-    Roster(Account *account);
+    Roster(Account *m_account);
     virtual ~Roster();
 
 signals:
@@ -30,9 +30,9 @@ private:
 
     Contact::Ptr addItem(Jreen::RosterItem::Ptr item);
 
-    Account *account;
-    Jreen::VCardManager vcardmgr;
-    ContactsMap contacts;
+    Account *m_account;
+    Jreen::VCardManager m_vcardManager;
+    ContactsMap m_contacts;
 };
 
 #endif //JUZEN_ROSTER_H

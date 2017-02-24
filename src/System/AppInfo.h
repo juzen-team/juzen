@@ -5,12 +5,12 @@ class QString;
 class AppInfo
 {
 public:
-    static QString getExecutableDir();
-    static QString getDataDir();
+    static QString executableDir();
+    static QString dataDir();
 
-    static QString getAppName();
-    static QString getAppFullName();
-    static QString getAppVersion();
+    static QString appName();
+    static QString appFullName();
+    static QString appVersion();
 };
 
 #endif //JUZEN_APPINFO_H

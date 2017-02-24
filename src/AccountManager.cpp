@@ -20,12 +20,12 @@ AccountManager::AccountManager()
         return;
     }
 
-    account.loadAccount(activeAccount);
+    m_account.loadAccount(activeAccount);
 }
 
 bool AccountManager::addExistingAccount(const QString &jid, const QString &password, int port)
 {
-    QString accountDirPath = QString("%1/accounts/%2").arg(AppInfo::getDataDir(), jid);
+    QString accountDirPath = QString("%1/accounts/%2").arg(AppInfo::dataDir(), jid);
 
     QDir accountDir;
     if (!accountDir.mkpath(accountDirPath)) {
@@ -44,27 +44,27 @@ bool AccountManager::addExistingAccount(const QString &jid, const QString &passw
 void AccountManager::getRegisterForm(const QString &server)
 {
     createRegistrationObjects(server);
-    registrationManager->registerAtServer();
+    m_registrationManager->registerAtServer();
 }
 
 void AccountManager::submitRegisterForm(const Jreen::DataForm::Ptr &form)
 {
     Jreen::RegistrationData data;
     data.setForm(form);
-    registrationManager->send(data);
+    m_registrationManager->send(data);
 }
 
-Account *AccountManager::getActiveAccount()
+Account *AccountManager::activeAccount()
 {
-    if (account.isNull()) {
+    if (m_account.isNull()) {
         return nullptr;
     }
-    return &account;
+    return &m_account;
 }
 
 QStringList AccountManager::findAllAccounts() const
 {
-    QDir accountsDir(AppInfo::getDataDir());
+    QDir accountsDir(AppInfo::dataDir());
     if (!accountsDir.exists() || !accountsDir.cd("accounts")) {
         return QStringList();
     }
@@ -93,10 +93,10 @@ void AccountManager::createRegistrationObjects(const QString &server)
 {
     deleteRegistrationObjects();
 
-    registrationClient = new Jreen::Client();
-    registrationManager = new Jreen::RegistrationManager(server, registrationClient);
+    m_registrationClient = new Jreen::Client();
+    m_registrationManager = new Jreen::RegistrationManager(server, m_registrationClient);
 
-    connect(registrationManager, &Jreen::RegistrationManager::formReceived, [this](const Jreen::RegistrationData &data)
+    connect(m_registrationManager, &Jreen::RegistrationManager::formReceived, [this](const Jreen::RegistrationData &data)
     {
         if (data.hasForm()) {
             emit registrationFormReceived(data);
@@ -105,12 +105,12 @@ void AccountManager::createRegistrationObjects(const QString &server)
         }
     });
 
-    connect(registrationManager, &Jreen::RegistrationManager::success, [this]()
+    connect(m_registrationManager, &Jreen::RegistrationManager::success, [this]()
     {
         emit registrationSuccess();
     });
 
-    connect(registrationManager, &Jreen::RegistrationManager::error, [this](const Jreen::Error::Ptr &error)
+    connect(m_registrationManager, &Jreen::RegistrationManager::error, [this](const Jreen::Error::Ptr &error)
     {
         QString errorStr = (error ? error->text() : "Unknown error.");
         if (errorStr.isEmpty()) {
@@ -126,7 +126,7 @@ void AccountManager::createRegistrationObjects(const QString &server)
         emit registrationError(errorStr);
     });
 
-    connect(registrationManager, &Jreen::RegistrationManager::unsupported, [this]()
+    connect(m_registrationManager, &Jreen::RegistrationManager::unsupported, [this]()
     {
         emit registrationUnsupported();
     });
@@ -134,6 +134,6 @@ void AccountManager::createRegistrationObjects(const QString &server)
 
 void AccountManager::deleteRegistrationObjects()
 {
-    registrationClient->deleteLater();
-    registrationManager->deleteLater();
+    m_registrationClient->deleteLater();
+    m_registrationManager->deleteLater();
 }

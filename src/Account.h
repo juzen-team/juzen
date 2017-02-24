@@ -3,11 +3,9 @@
 
 #include "Roster/Roster.h"
 #include "System/Settings.h"
-
 #include <jreen/client.h>
 #include <QtCore/QObject>
 
-class QString;
 class Account: public QObject
 {
     Q_OBJECT
@@ -23,17 +21,21 @@ public:
 
     void connectToServer();
 
-    Jreen::Client *getClient();
-    Roster *getRoster();
+    Jreen::Client *client();
+    Roster *roster();
 
 private:
+    void onConnect();
+    void onDisconnect(Jreen::Client::DisconnectReason reason);
+    void onRosterLoaded();
+
     QString encryptPassword(const QString &password);
     QString decryptPassword(const QString &crypted);
 
-    Jreen::Client client;
-    Roster roster;
+    QString m_jid;
 
-    QString jid;
+    Jreen::Client m_client;
+    Roster m_roster;
 };
 
 #endif //JUZEN_ACCOUNT_H

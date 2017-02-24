@@ -4,17 +4,17 @@
 #include <QtCore/QStandardPaths>
 #include <QtWidgets/QApplication>
 
-QString AppInfo::getExecutableDir()
+QString AppInfo::executableDir()
 {
     return qApp->applicationDirPath();
 }
 
-QString AppInfo::getDataDir()
+QString AppInfo::dataDir()
 {
     QDir dir;
 
     // Check if that portable version
-    dir.setPath(AppInfo::getExecutableDir());
+    dir.setPath(AppInfo::executableDir());
     if (dir.exists()) {
         if (dir.cd("Juzen") || dir.cd("juzen")) {
             return dir.path();
@@ -25,17 +25,17 @@ QString AppInfo::getDataDir()
     return QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
 }
 
-QString AppInfo::getAppName()
+QString AppInfo::appName()
 {
     return "juzen";
 }
 
-QString AppInfo::getAppFullName()
+QString AppInfo::appFullName()
 {
-    return QString("%1 v%2").arg(AppInfo::getAppName(), AppInfo::getAppVersion());
+    return QString("%1 v%2").arg(AppInfo::appName(), AppInfo::appVersion());
 }
 
-QString AppInfo::getAppVersion()
+QString AppInfo::appVersion()
 {
     return "0.1";
 }

@@ -8,9 +8,9 @@
 #include <QtCore/QDebug>
 
 Contact::Contact(Jreen::RosterItem::Ptr &rosterItem, QObject *parent) : QObject(parent),
-                                                                        rosterItem(rosterItem)
+                                                                        m_rosterItem(rosterItem)
 {
-    contactPhoto = generateNoPhotoReplacement();
+    contactPhoto = generateNoPhotoFiller();
 }
 
 Contact::~Contact()
@@ -19,17 +19,17 @@ Contact::~Contact()
 
 QString Contact::jid() const
 {
-    return rosterItem->jid();
+    return m_rosterItem->jid();
 }
 
 QString Contact::name() const
 {
-    if (vcard) {
-        return vcard->formattedName();
+    if (m_vcard) {
+        return m_vcard->formattedName();
     }
 
-    if (rosterItem) {
-        return rosterItem->name();
+    if (m_rosterItem) {
+        return m_rosterItem->name();
     }
 
     return QString();    
@@ -42,56 +42,56 @@ QPixmap Contact::photo() const
 
 ContactResource::Ptr Contact::mainResource() const
 {
-    if (resources.size() == 0) {
+    if (m_resources.size() == 0) {
         return QSharedPointer<ContactResource>();
     }
-    return resources[0];
+    return m_resources[0];
 }
 
 QVector<ContactResource::Ptr> Contact::allResources() const
 {
-    return resources;
+    return m_resources;
 }
 
 void Contact::presenceReceived(const Jreen::Presence &presence)
 {
     if (presence.subtype() == Jreen::Presence::Unavailable) {
-        if (resources.size() > 0) {
+        if (m_resources.size() > 0) {
             removeResource(presence.from().resource());
         }
     } else {
         addOrChangeResource(presence);
     }
-    std::sort(resources.rbegin(), resources.rend());
+    std::sort(m_resources.rbegin(), m_resources.rend());
     emit contactChanged(jid());
 }
 
 void Contact::vCardFetched(const Jreen::VCard::Ptr &vcard)
 {
     contactPhoto.loadFromData(vcard->photo().data(), vcard->photo().mimeType().toLatin1().data());
-    this->vcard = vcard;
+    this->m_vcard = vcard;
     emit contactChanged(jid());
 }
 
 void Contact::addOrChangeResource(const Jreen::Presence &presence)
 {
-    auto r = std::find_if(resources.begin(), resources.end(),
+    auto r = std::find_if(m_resources.begin(), m_resources.end(),
         [&presence](auto r)
         {
             return r->resource() == presence.from().resource();
         }
     );
-    if (r != resources.end()) {
+    if (r != m_resources.end()) {
         (*r)->setPresence(presence);
     } else {
         auto resource = QSharedPointer<ContactResource>::create(presence, this);
-        resources.push_back(resource);
+        m_resources.push_back(resource);
     }
 }
 
 void Contact::removeResource(const QString &resource)
 {
-    resources.erase(std::remove_if(resources.begin(), resources.end(),
+    m_resources.erase(std::remove_if(m_resources.begin(), m_resources.end(),
         [&resource](auto r)
         {
             return r->resource() == resource;
@@ -99,7 +99,7 @@ void Contact::removeResource(const QString &resource)
     ));
 }
 
-QPixmap Contact::generateNoPhotoReplacement() const
+QPixmap Contact::generateNoPhotoFiller() const
 {
     QPixmap replacementPhoto(40, 40);
     QPainter painter(&replacementPhoto);

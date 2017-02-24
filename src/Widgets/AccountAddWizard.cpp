@@ -7,16 +7,16 @@
 #include <QtWidgets/QCommandLinkButton>
 #include <QtWidgets/QLayout>
 
-AccountAddWizard::AccountAddWizard(AccountManager *am, QWidget *parent) : QWizard(parent), am(am)
+AccountAddWizard::AccountAddWizard(AccountManager *accountManager, QWidget *parent) : QWizard(parent), m_accountManager(accountManager)
 {
     setWindowTitle("Add new account");
     setOptions(QWizard::DisabledBackButtonOnLastPage | QWizard::NoCancelButtonOnLastPage);
 
-    selectionPageId = addPage(createSelectionPage());
-    registerPageId = addPage(createRegisterPage());
-    registerFormPageId = addPage(createRegisterFormPage());
-    existingPageId = addPage(createExistingPage());
-    finishPageId = addPage(createFinishPage());
+    m_selectionPageId = addPage(createSelectionPage());
+    m_registerPageId = addPage(createRegisterPage());
+    m_registerFormPageId = addPage(createRegisterFormPage());
+    m_existingPageId = addPage(createExistingPage());
+    m_finishPageId = addPage(createFinishPage());
 }
 
 AccountAddWizard::~AccountAddWizard()
@@ -25,28 +25,28 @@ AccountAddWizard::~AccountAddWizard()
 
 int AccountAddWizard::nextId() const
 {
-    if (currentId() == selectionPageId) {
-        return nextPageId;
+    if (currentId() == m_selectionPageId) {
+        return m_nextPageId;
     }
-    if (currentId() == registerPageId) {
-        return registerFormPageId;
+    if (currentId() == m_registerPageId) {
+        return m_registerFormPageId;
     }
-    if (currentId() == registerFormPageId) {
+    if (currentId() == m_registerFormPageId) {
         if (property("name").toString().isEmpty()) {
-            return existingPageId;
+            return m_existingPageId;
         }
-        return finishPageId;
+        return m_finishPageId;
     }
-    if (currentId() == existingPageId) {
-        return finishPageId;
+    if (currentId() == m_existingPageId) {
+        return m_finishPageId;
     }
 
     return -1;
 }
 
-AccountManager *AccountAddWizard::getAccountManager()
+AccountManager *AccountAddWizard::accountManager()
 {
-    return am;
+    return m_accountManager;
 }
 
 QWizardPage *AccountAddWizard::createSelectionPage()
@@ -59,13 +59,13 @@ QWizardPage *AccountAddWizard::createSelectionPage()
     auto registerButton = new QCommandLinkButton("Register new account", "Register new account on selected server.", this);
     connect(registerButton, &QCommandLinkButton::clicked, [&](bool /*checked*/)
     {
-        nextPageId = registerPageId;
+        m_nextPageId = m_registerPageId;
         next();
     });
     auto existingButton = new QCommandLinkButton("Use existing account", this);
     connect(existingButton, &QCommandLinkButton::clicked, [&](bool /*checked*/)
     {
-        nextPageId = existingPageId;
+        m_nextPageId = m_existingPageId;
         next();
     });
 

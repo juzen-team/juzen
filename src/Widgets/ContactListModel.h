@@ -28,8 +28,8 @@ public:
 private:
     void sort();
 
-    QVector<Contact::Ptr> contacts;
-    SortType sortType = SortType::Roster;
+    QVector<Contact::Ptr> m_contacts;
+    SortType m_sortType = SortType::Roster;
 };
 
 #endif //JUZEN_CONTACTLISTMODEL_H

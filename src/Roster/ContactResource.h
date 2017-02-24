@@ -13,7 +13,7 @@ public:
     using Ptr = QSharedPointer<ContactResource>;
     friend bool operator<(const ContactResource::Ptr &lhs, const ContactResource::Ptr &rhs);
 
-    ContactResource(const Jreen::Presence &jpresence = Jreen::Presence(Jreen::Presence::Invalid, QString()), QObject *parent = Q_NULLPTR);
+    ContactResource(const Jreen::Presence &presence = Jreen::Presence(Jreen::Presence::Invalid, QString()), QObject *parent = Q_NULLPTR);
     virtual ~ContactResource();
 
     QString resource() const;
@@ -24,8 +24,8 @@ public:
     void setPresence(const Jreen::Presence &jpresence);
 
 private:
-    Jreen::Presence jpresence;
-    QDateTime lastStatus = QDateTime::currentDateTime();
+    Jreen::Presence m_presence;
+    QDateTime m_lastStatus = QDateTime::currentDateTime();
 };
 
 #endif //JUZEN_CONTACTRESOURCE_H

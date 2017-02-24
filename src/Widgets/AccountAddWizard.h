@@ -9,29 +9,29 @@ class AccountAddWizard: public QWizard
     Q_OBJECT
 
 public:
-    AccountAddWizard(AccountManager *am, QWidget *parent = Q_NULLPTR);
+    AccountAddWizard(AccountManager *accountManager, QWidget *parent = Q_NULLPTR);
     virtual ~AccountAddWizard();
 
     int nextId() const;
 
-    AccountManager *getAccountManager();
+    AccountManager *accountManager();
 
 private:
-    AccountManager *am;
-
     QWizardPage *createSelectionPage();
     QWizardPage *createRegisterPage();
     QWizardPage *createRegisterFormPage();
     QWizardPage *createExistingPage();
     QWizardPage *createFinishPage();
 
-    int selectionPageId;
-    int registerPageId;
-    int registerFormPageId;
-    int existingPageId;
-    int finishPageId;
+    AccountManager *m_accountManager;
 
-    int nextPageId = 0;
+    int m_selectionPageId;
+    int m_registerPageId;
+    int m_registerFormPageId;
+    int m_existingPageId;
+    int m_finishPageId;
+
+    int m_nextPageId = 0;
 };
 
 #endif //JUZEN_ACCOUNTADDWIZARD_H

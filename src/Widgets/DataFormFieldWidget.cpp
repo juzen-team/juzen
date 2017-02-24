@@ -6,7 +6,7 @@
 #include <QtWidgets/QVBoxLayout>
 
 DataFormFieldWidget::DataFormFieldWidget(const Jreen::DataFormField &field, const QMapBobs &bobsMap, QWidget *parent) :
-        QWidget(parent), field(field), bobsMap(bobsMap)
+        QWidget(parent), m_field(field), m_bobsMap(bobsMap)
 {
     if (field.type() == Jreen::DataFormField::Hidden) {
         return;
@@ -74,14 +74,14 @@ DataFormFieldWidget::~DataFormFieldWidget()
 
 bool DataFormFieldWidget::fieldIsLink() const
 {
-    return (field.type() == Jreen::DataFormField::TextSingle || field.type() == Jreen::DataFormField::None)
-           && field.var() == "url";
+    return (m_field.type() == Jreen::DataFormField::TextSingle || m_field.type() == Jreen::DataFormField::None)
+           && m_field.var() == "url";
 }
 
 void DataFormFieldWidget::generateText(const QVariant &value, QVBoxLayout *layout)
 {
     if (fieldIsLink()) {
-        auto label = new QLabel(QString("<a href=\"%1\">%2</a>").arg(value.toString(), field.label()), this);
+        auto label = new QLabel(QString("<a href=\"%1\">%2</a>").arg(value.toString(), m_field.label()), this);
         label->setTextInteractionFlags(Qt::TextBrowserInteraction);
         label->setOpenExternalLinks(true);
         layout->addWidget(label);
@@ -94,25 +94,25 @@ void DataFormFieldWidget::generateText(const QVariant &value, QVBoxLayout *layou
     auto lineEdit = new QLineEdit(value.toString(), this);
     connect(lineEdit, &QLineEdit::textChanged, [this](const QString &text)
     {
-        field.setValue(text);
+        m_field.setValue(text);
     });
     layout->addWidget(lineEdit);
 }
 
 void DataFormFieldWidget::generateMedia(QVBoxLayout *layout)
 {
-    if (!field.media()) {
+    if (!m_field.media()) {
         return;
     }
 
-    Jreen::DataFormMedia::Ptr media = field.media();
+    Jreen::DataFormMedia::Ptr media = m_field.media();
     QByteArray data;
     QString type;
 
     for (auto &uri : media->uries()) {
         const QUrl url = uri.url();
         if (url.scheme() == "cid") {
-            data = bobsMap.value(uri.url().toString(QUrl::RemoveScheme));
+            data = m_bobsMap.value(uri.url().toString(QUrl::RemoveScheme));
             if (!data.isEmpty()) {
                 type = uri.type();
                 break;

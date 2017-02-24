@@ -4,13 +4,13 @@
 
 #include <QtCore/qdebug.h>
 
-Roster::Roster(Account *account) : AbstractRoster(account->getClient()),
-                                   account(account),
-                                   vcardmgr(account->getClient())
+Roster::Roster(Account *m_account) : AbstractRoster(m_account->client()),
+                                     m_account(m_account),
+                                     m_vcardManager(m_account->client())
 {
-    connect(account->getClient(), &Jreen::Client::presenceReceived, this, &Roster::onPresenceReceived);
-    connect(&vcardmgr, &Jreen::VCardManager::vCardFetched, this, &Roster::onVCardFetched);
-    connect(&vcardmgr, &Jreen::VCardManager::vCardUpdateDetected, this, &Roster::onVCardUpdateDetected);
+    connect(m_account->client(), &Jreen::Client::presenceReceived, this, &Roster::onPresenceReceived);
+    connect(&m_vcardManager, &Jreen::VCardManager::vCardFetched, this, &Roster::onVCardFetched);
+    connect(&m_vcardManager, &Jreen::VCardManager::vCardUpdateDetected, this, &Roster::onVCardUpdateDetected);
 }
 
 Roster::~Roster()
@@ -37,19 +37,19 @@ void Roster::onPresenceReceived(const Jreen::Presence &presence)
 {
     if (presence.isSubscription()) {
     } else {
-        if (!contacts.contains(presence.from().bare())) {
+        if (!m_contacts.contains(presence.from().bare())) {
             return;
         }
-        contacts[presence.from().bare()]->presenceReceived(presence);
+        m_contacts[presence.from().bare()]->presenceReceived(presence);
     }
 }
 
 void Roster::onVCardFetched(const Jreen::VCard::Ptr &vcard, const Jreen::JID &jid)
 {
-    if (!contacts.contains(jid.bare())) {
+    if (!m_contacts.contains(jid.bare())) {
         return;
     }
-    contacts[jid.bare()]->vCardFetched(vcard);
+    m_contacts[jid.bare()]->vCardFetched(vcard);
 }
 
 void Roster::onVCardUpdateDetected(const Jreen::JID &jid, const Jreen::VCardUpdate::Ptr &update)
@@ -60,12 +60,12 @@ void Roster::onVCardUpdateDetected(const Jreen::JID &jid, const Jreen::VCardUpda
 Contact::Ptr Roster::addItem(Jreen::RosterItem::Ptr item)
 {
     QString jid = item->jid();
-    if (contacts.contains(jid)) {
-        return contacts[jid];
+    if (m_contacts.contains(jid)) {
+        return m_contacts[jid];
     }
 
     auto contact = QSharedPointer<Contact>::create(item, this);
-    contacts[jid] = contact;
-    vcardmgr.fetch(jid);
+    m_contacts[jid] = contact;
+    m_vcardManager.fetch(jid);
     return contact;
 }

@@ -13,9 +13,9 @@ AccountAddExistingWizardPage::AccountAddExistingWizardPage(QWidget *parent) : QW
     jidEdit->setPlaceholderText("jid@example.com[:port]");
     connect(jidEdit, &QLineEdit::textChanged, [&](const QString &text)
     {
-        jid = text.section(':', 0, 0);
+        m_jid = text.section(':', 0, 0);
         QString portStr = text.section(':', 1, 1);
-        port = (portStr.isEmpty() ? -1 : portStr.toInt());
+        m_port = (portStr.isEmpty() ? -1 : portStr.toInt());
         emit completeChanged();
     });
     
@@ -23,7 +23,7 @@ AccountAddExistingWizardPage::AccountAddExistingWizardPage(QWidget *parent) : QW
     passwordEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
     connect(passwordEdit, &QLineEdit::textChanged, [&](const QString &text)
     {
-        password = text;
+        m_password = text;
         emit completeChanged();
     });
 
@@ -42,17 +42,17 @@ AccountAddExistingWizardPage::~AccountAddExistingWizardPage()
 
 bool AccountAddExistingWizardPage::isComplete() const
 {
-    return !jid.isEmpty() && !password.isEmpty();
+    return !m_jid.isEmpty() && !m_password.isEmpty();
 }
 
 bool AccountAddExistingWizardPage::validatePage()
 {
-    if (jid.count('@') != 1) {
+    if (m_jid.count('@') != 1) {
         QMessageBox::critical(this, "Error", "Please enter jid in following format: jid@example.com[:port].");
         return false;
     }
 
-    return wizard()->getAccountManager()->addExistingAccount(jid, password, port);
+    return wizard()->accountManager()->addExistingAccount(m_jid, m_password, m_port);
 }
 
 AccountAddWizard *AccountAddExistingWizardPage::wizard() const

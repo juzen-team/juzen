@@ -25,7 +25,7 @@ DataFormWidget::DataFormWidget(const Jreen::DataForm::Ptr &form, const QList<Jre
 }
 
 DataFormWidget::DataFormWidget(const Jreen::DataForm::Ptr &form, const QList<Jreen::BitsOfBinary::Ptr> &bobs, DataFormWidget *other, QWidget *parent) :
-        QWidget(parent), form(form)
+        QWidget(parent), m_form(form)
 {
     DataFormFieldWidget::QMapBobs bobsMap;
     for (const Jreen::BitsOfBinary::Ptr &bob : bobs) {
@@ -45,7 +45,7 @@ DataFormWidget::DataFormWidget(const Jreen::DataForm::Ptr &form, const QList<Jre
             if (field.type() != Jreen::DataFormField::Invalid &&
                 field.type() != Jreen::DataFormField::Fixed &&
                 field.type() != Jreen::DataFormField::Hidden) {
-                field.setValues(other->getDataForm()->field(i).values());
+                field.setValues(other->dataForm()->field(i).values());
             }
         }
         innerLayout->addWidget(new DataFormFieldWidget(field, bobsMap, innerWidget));
@@ -67,8 +67,8 @@ DataFormWidget::~DataFormWidget()
 bool DataFormWidget::allRequiredFieldsFilled() const
 {
     bool ok = true;
-    for (int i = 0; i < form->fieldsCount(); i++) {
-        Jreen::DataFormField field = form->field(i);
+    for (int i = 0; i < m_form->fieldsCount(); i++) {
+        Jreen::DataFormField field = m_form->field(i);
         if (field.isRequired() && field.value().isEmpty()) {
             ok = false;
             break;
@@ -77,8 +77,8 @@ bool DataFormWidget::allRequiredFieldsFilled() const
     return ok;
 }
 
-Jreen::DataForm::Ptr DataFormWidget::getDataForm()
+Jreen::DataForm::Ptr DataFormWidget::dataForm()
 {
-    form->setType(Jreen::DataForm::Submit);
-    return form;
+    m_form->setType(Jreen::DataForm::Submit);
+    return m_form;
 }

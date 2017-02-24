@@ -27,9 +27,9 @@ private:
     void performRequest();
     void setPageComplete(bool complete = true);
 
-    DataFormWidget *dfw = nullptr;
-    bool registrationSuccess = false;
-    bool pageComplete = false;
+    DataFormWidget *m_dataFormWidget = nullptr;
+    bool m_registrationSuccess = false;
+    bool m_pageComplete = false;
 };
 
 #endif //JUZEN_ACCOUNTREGISTERFORMWIZARDPAGE_H

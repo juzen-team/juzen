@@ -8,8 +8,8 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    app.setApplicationName(AppInfo::getAppName());
-    app.setApplicationVersion(AppInfo::getAppVersion());
+    app.setApplicationName(AppInfo::appName());
+    app.setApplicationVersion(AppInfo::appVersion());
 
     auto palette = app.palette();
     palette.setColor(QPalette::Background, Qt::white);
@@ -19,11 +19,11 @@ int main(int argc, char *argv[])
     qsrand((uint)time.msec());
 
     AccountManager am;
-    if (!am.getActiveAccount()) {
+    if (!am.activeAccount()) {
         return 0;
     }
 
-    MainWindow mw(am.getActiveAccount());
+    MainWindow mw(am.activeAccount());
     mw.show();
 
     return app.exec();

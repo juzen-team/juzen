@@ -14,7 +14,7 @@ public:
     virtual ~AccountRegisterWizardPage();
 
 private:
-    QVector<QPair<QString, QString>> servers;
+    QVector<QPair<QString, QString>> m_servers;
 };
 
 #endif //JUZEN_ACCOUNTREGISTERWIZARDPAGE_H

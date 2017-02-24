@@ -11,7 +11,7 @@ class MainWindow: public QWidget
     Q_OBJECT
 
 public:
-    MainWindow(Account *account, QWidget *parent = Q_NULLPTR);
+    MainWindow(Account *m_account, QWidget *parent = Q_NULLPTR);
     virtual ~MainWindow();
 
     QGridLayout *layout() const;
@@ -19,10 +19,8 @@ public:
 private:
     void initWindow();
 
-    Account *account;
-
-    ContactListView *contactListView;
-    //ContactListView *recentListView;
+    Account *m_account;
+    ContactListView *m_contactListView;
 };
 
 #endif //JUZEN_MAINWINDOW_H
