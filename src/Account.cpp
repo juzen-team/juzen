@@ -1,5 +1,6 @@
 #include "Account.h"
 #include "Crypto/QBlowfish.h"
+#include <jreen/capabilities.h>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMessageBox>
 
@@ -8,6 +9,9 @@ Account::Account(const QString &jid) : m_roster(this)
     connect(&m_client, &Jreen::Client::connected, this, &Account::onConnect);
     connect(&m_client, &Jreen::Client::disconnected, this, &Account::onDisconnect);
     connect(&m_roster, &Roster::loaded, this, &Account::onRosterLoaded);
+
+    auto caps = m_client.presence().payload<Jreen::Capabilities>();
+    caps->setNode("https://juzen.im/");
 
     auto disco = m_client.disco();
     disco->setSoftwareVersion("Juzen", "0.1");
