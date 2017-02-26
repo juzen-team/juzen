@@ -5,7 +5,7 @@
 QPixmap IconFactory::activityIcon(const QString &general, const QString &specific)
 {
     auto name = QString(":/activities/%1%2%3.png").arg(general);
-    if (specific.isEmpty()) {
+    if (specific.isEmpty() || specific == "other") {
         name = name.arg(QString(), QString());
     } else {
         name = name.arg("_", specific);

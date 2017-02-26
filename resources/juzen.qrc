@@ -82,7 +82,7 @@
     <file alias="activities/traveling_on_a_trip.png">icons/activities/traveling_on_a_trip.png</file>
     <file alias="activities/traveling_walking.png">icons/activities/traveling_walking.png</file>
     <file alias="activities/unknown.png">icons/activities/unknown.png</file>
-    <file alias="activities/working_working.png">icons/activities/working_working.png</file>
+    <file alias="activities/working.png">icons/activities/working.png</file>
     <file alias="activities/working_coding.png">icons/activities/working_coding.png</file>
     <file alias="activities/working_in_a_meeting.png">icons/activities/working_in_a_meeting.png</file>
     <file alias="activities/working_studying.png">icons/activities/working_studying.png</file>
