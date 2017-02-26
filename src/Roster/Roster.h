@@ -18,6 +18,10 @@ public:
     Roster(Account *m_account);
     virtual ~Roster();
 
+    Account *account();
+
+    Jreen::VCardReply *fetchVCard(const QString &jid);
+
 signals:
     void contactAdded(Contact::Ptr contact);
 

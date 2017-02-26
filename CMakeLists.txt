@@ -44,6 +44,8 @@ set(SOURCE_FILES
     src/Roster/Contact.h
     src/Roster/ContactResource.cpp
     src/Roster/ContactResource.h
+    src/Roster/ContactPhoto.cpp
+    src/Roster/ContactPhoto.h
     src/Crypto/QBlowfish.cpp
     src/Crypto/QBlowfish.h
     src/Crypto/QBlowfish_p.h

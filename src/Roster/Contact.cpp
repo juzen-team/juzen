@@ -1,22 +1,26 @@
 #include "Contact.h"
 #include "Roster.h"
 #include <jreen/stanzaextension.h>
-#include <jreen/vcardupdate.h>
 #include <QtCore/QSharedPointer>
-#include <QtGui/QColor>
-#include <QtGui/QPainter>
 #include <algorithm>
 
 #include <QtCore/QDebug>
 
-Contact::Contact(Jreen::RosterItem::Ptr &rosterItem, QObject *parent) : QObject(parent),
-                                                                        m_rosterItem(rosterItem)
+Contact::Contact(Jreen::RosterItem::Ptr &rosterItem, Roster *roster) : QObject(roster),
+                                                                       m_roster(roster),
+                                                                       m_rosterItem(rosterItem),
+                                                                       m_photo(this)
 {
-    contactPhoto = generateNoPhotoFiller();
+    m_photo.generatePhoto();
 }
 
 Contact::~Contact()
 {
+}
+
+Roster *Contact::roster()
+{
+    return m_roster;
 }
 
 QString Contact::jid() const
@@ -39,7 +43,7 @@ QString Contact::name() const
 
 QPixmap Contact::photo() const
 {
-    return contactPhoto;
+    return m_photo.photo();
 }
 
 Jreen::Activity::Ptr Contact::activity() const
@@ -78,11 +82,6 @@ void Contact::presenceReceived(const Jreen::Presence &presence)
         }
     } else {
         addOrChangeResource(presence);
-
-        auto photoHash = presence.payload<Jreen::VCardUpdate>();
-        if (photoHash) {
-            qDebug() << "!!!!! HASH RECEIVED";
-        }
     }
     std::sort(m_resources.rbegin(), m_resources.rend());
     emit contactChanged(jid());
@@ -111,11 +110,25 @@ void Contact::eventReceived(Jreen::Payload::Ptr &event)
     }
 }
 
+void Contact::updateVCard()
+{
+    m_roster->fetchVCard(jid());
+}
+
 void Contact::vCardFetched(const Jreen::VCard::Ptr &vcard)
 {
-    contactPhoto.loadFromData(vcard->photo().data(), vcard->photo().mimeType().toLatin1().data());
+    m_photo.setPhoto(vcard->photo().data(), vcard->photo().mimeType());
     this->m_vcard = vcard;
     emit contactChanged(jid());
+}
+
+void Contact::vCardUpdated(const Jreen::VCardUpdate::Ptr &update)
+{
+    if (update && update->hasPhotoInfo()) {
+        if (!m_photo.setPhoto(update->photoHash())) {
+            updateVCard();
+        }
+    }
 }
 
 void Contact::addOrChangeResource(const Jreen::Presence &presence)
@@ -142,29 +155,4 @@ void Contact::removeResource(const QString &resource)
             return r->resource() == resource;
         }
     ));
-}
-
-QPixmap Contact::generateNoPhotoFiller() const
-{
-    QPixmap replacementPhoto(40, 40);
-    QPainter painter(&replacementPhoto);
-
-    auto colorNames = QColor::colorNames();
-    colorNames.removeAll("black");
-    colorNames.removeAll("white");
-    auto randColorName = colorNames[qrand() % colorNames.size()];
-
-    QRect rect(0, 0, replacementPhoto.width(), replacementPhoto.height());
-    painter.fillRect(rect, QBrush(QColor(randColorName)));
-
-    QFont font;
-    font.setPointSize(30);
-    font.setStyleStrategy(static_cast<QFont::StyleStrategy>(QFont::PreferAntialias | QFont::PreferQuality));
-    painter.setFont(font);
-
-    painter.drawText(rect, Qt::AlignCenter, QString(name()[0]));
-
-    painter.end();
-
-    return replacementPhoto;
 }

@@ -22,7 +22,17 @@ Roster::~Roster()
 {
 }
 
-void Roster::onItemAdded(QSharedPointer<Jreen::RosterItem> item)
+Account *Roster::account()
+{
+    return m_account;
+}
+
+Jreen::VCardReply *Roster::fetchVCard(const QString &jid)
+{
+    return m_vcardManager.fetch(jid);
+}
+
+void Roster::onItemAdded(Jreen::RosterItem::Ptr item)
 {
     auto contact = addItem(item);
     emit contactAdded(contact);
@@ -79,7 +89,10 @@ void Roster::onVCardFetched(const Jreen::VCard::Ptr &vcard, const Jreen::JID &ji
 
 void Roster::onVCardUpdateDetected(const Jreen::JID &jid, const Jreen::VCardUpdate::Ptr &update)
 {
-
+    if (!m_contacts.contains(jid.bare())) {
+        return;
+    }
+    m_contacts[jid.bare()]->vCardUpdated(update);
 }
 
 Contact::Ptr Roster::addItem(Jreen::RosterItem::Ptr item)
@@ -91,6 +104,5 @@ Contact::Ptr Roster::addItem(Jreen::RosterItem::Ptr item)
 
     auto contact = QSharedPointer<Contact>::create(item, this);
     m_contacts[jid] = contact;
-    m_vcardManager.fetch(jid);
     return contact;
 }

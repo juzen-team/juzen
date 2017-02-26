@@ -1,5 +1,4 @@
 #include "Resources/IconFactory.h"
-
 #include <QtGui/QPixmap>
 
 QPixmap IconFactory::activityIcon(const QString &general, const QString &specific)
