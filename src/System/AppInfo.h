@@ -7,6 +7,7 @@ class AppInfo
 public:
     static QString executableDir();
     static QString dataDir();
+    static QString accountDataDir(const QString &jid);
 
     static QString appName();
     static QString appFullName();

@@ -1,7 +1,6 @@
 #include "AccountManager.h"
 #include "System/AppInfo.h"
 #include "Widgets/AccountAddWizard.h"
-
 #include <QtCore/QDir>
 
 AccountManager::AccountManager()
@@ -25,10 +24,8 @@ AccountManager::AccountManager()
 
 bool AccountManager::addExistingAccount(const QString &jid, const QString &password, int port)
 {
-    QString accountDirPath = QString("%1/accounts/%2").arg(AppInfo::dataDir(), jid);
-
     QDir accountDir;
-    if (!accountDir.mkpath(accountDirPath)) {
+    if (!accountDir.mkpath(AppInfo::accountDataDir(jid))) {
         return false;
     }
 
@@ -76,7 +73,7 @@ QString AccountManager::findActiveAccount() const
 {
     QStringList accounts = findAllAccounts();
     
-    Settings settings("config");
+    auto settings = Settings::config();
     QString activeAccount = settings.get<QString>("active_account");
     if (accounts.contains(activeAccount)) {
         return activeAccount;

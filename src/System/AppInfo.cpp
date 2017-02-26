@@ -25,6 +25,11 @@ QString AppInfo::dataDir()
     return QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
 }
 
+QString AppInfo::accountDataDir(const QString &jid)
+{
+    return QString("%1/accounts/%2").arg(dataDir(), jid);
+}
+
 QString AppInfo::appName()
 {
     return "juzen";

@@ -9,10 +9,11 @@ class Settings : public QObject
     Q_OBJECT
 
 public:
-    Settings(const QString &path = QString(), bool relative = true);
-    
-    void setPath(const QString &path);
-    void setRelativeConfigPath(const QString &path);
+    Settings(const QString &path = QString());
+    Settings(const Settings &other);
+
+    static Settings config();
+    static Settings accountConfig(const QString &account);
     
     template<typename T>
     T get(const QString &key, const T &defaultValue = T())

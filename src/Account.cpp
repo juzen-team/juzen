@@ -1,6 +1,7 @@
 #include "Account.h"
 #include "XmlStreamHandler.h"
 #include "Crypto/QBlowfish.h"
+#include "System/AppInfo.h"
 #include <jreen/activity.h>
 #include <jreen/capabilities.h>
 #include <jreen/mood.h>
@@ -36,7 +37,7 @@ void Account::createAccount(const QString &jid, const QString &password, int por
 {
     m_jid = jid;
 
-    Settings settings(QString("accounts/%1/config").arg(jid));
+    auto settings = Settings::accountConfig(jid);
     settings.set("password", encryptPassword(password));
     settings.set("port", port);
 }
@@ -47,7 +48,7 @@ void Account::loadAccount(const QString &jid)
         return;
     }
 
-    Settings settings(QString("accounts/%1/config").arg(jid));
+    auto settings = Settings::accountConfig(jid);
     QString password = settings.get<QString>("password");
     int port = settings.get("port", -1);
 

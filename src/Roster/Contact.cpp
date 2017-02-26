@@ -1,6 +1,7 @@
 #include "Contact.h"
 #include "Roster.h"
 #include <jreen/stanzaextension.h>
+#include <jreen/vcardupdate.h>
 #include <QtCore/QSharedPointer>
 #include <QtGui/QColor>
 #include <QtGui/QPainter>
@@ -77,6 +78,11 @@ void Contact::presenceReceived(const Jreen::Presence &presence)
         }
     } else {
         addOrChangeResource(presence);
+
+        auto photoHash = presence.payload<Jreen::VCardUpdate>();
+        if (photoHash) {
+            qDebug() << "!!!!! HASH RECEIVED";
+        }
     }
     std::sort(m_resources.rbegin(), m_resources.rend());
     emit contactChanged(jid());
