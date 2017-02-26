@@ -47,12 +47,16 @@ set(SOURCE_FILES
     src/Crypto/QBlowfish.cpp
     src/Crypto/QBlowfish.h
     src/Crypto/QBlowfish_p.h
+    src/Resources/IconFactory.cpp
+    src/Resources/IconFactory.h
     src/System/AppInfo.cpp
     src/System/AppInfo.h
     src/System/Settings.cpp
     src/System/Settings.h
     src/Account.cpp
     src/Account.h
+    src/XmlStreamHandler.cpp
+    src/XmlStreamHandler.h
     src/AccountManager.cpp
     src/AccountManager.h
     src/MainWindow.cpp

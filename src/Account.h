@@ -4,6 +4,7 @@
 #include "Roster/Roster.h"
 #include "System/Settings.h"
 #include <jreen/client.h>
+#include <jreen/pubsubmanager.h>
 #include <QtCore/QObject>
 
 class Account: public QObject
@@ -22,6 +23,7 @@ public:
     void connectToServer();
 
     Jreen::Client *client();
+    Jreen::PubSub::Manager *pubSubManager();
     Roster *roster();
 
 private:
@@ -35,6 +37,7 @@ private:
     QString m_jid;
 
     Jreen::Client m_client;
+    Jreen::PubSub::Manager m_pubSubManager;
     Roster m_roster;
 };
 

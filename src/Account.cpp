@@ -1,10 +1,14 @@
 #include "Account.h"
+#include "XmlStreamHandler.h"
 #include "Crypto/QBlowfish.h"
+#include <jreen/activity.h>
 #include <jreen/capabilities.h>
+#include <jreen/mood.h>
+#include <jreen/tune.h>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMessageBox>
 
-Account::Account(const QString &jid) : m_roster(this)
+Account::Account(const QString &jid) : m_pubSubManager(&m_client), m_roster(this)
 {
     connect(&m_client, &Jreen::Client::connected, this, &Account::onConnect);
     connect(&m_client, &Jreen::Client::disconnected, this, &Account::onDisconnect);
@@ -16,6 +20,10 @@ Account::Account(const QString &jid) : m_roster(this)
     auto disco = m_client.disco();
     disco->setSoftwareVersion("Juzen", "0.1");
     disco->addIdentity(Jreen::Disco::Identity("client", "type", "Juzen"));
+
+    m_pubSubManager.addEntityType(Jreen::Activity::staticPayloadType());
+    m_pubSubManager.addEntityType(Jreen::Mood::staticPayloadType());
+    m_pubSubManager.addEntityType(Jreen::Tune::staticPayloadType());
 
     loadAccount(jid);
 }
@@ -76,6 +84,11 @@ Jreen::Client *Account::client()
     return &m_client;
 }
 
+Jreen::PubSub::Manager *Account::pubSubManager()
+{
+    return &m_pubSubManager;
+}
+
 Roster *Account::roster()
 {
     return &m_roster;
@@ -115,7 +128,7 @@ void Account::onDisconnect(Jreen::Client::DisconnectReason reason)
 
 void Account::onRosterLoaded()
 {
-    m_client.setPresence(Jreen::Presence::Available);
+    m_client.setPresence(Jreen::Presence::Available, QString(), 100);
 }
 
 QString Account::encryptPassword(const QString &password)

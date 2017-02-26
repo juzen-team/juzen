@@ -1,5 +1,7 @@
 #include "Roster/Roster.h"
 #include "Account.h"
+#include <jreen/mood.h>
+#include <jreen/stanzaextension.h>
 #include <QtCore/QSharedPointer>
 
 #include <QtCore/qdebug.h>
@@ -9,6 +11,9 @@ Roster::Roster(Account *m_account) : AbstractRoster(m_account->client()),
                                      m_vcardManager(m_account->client())
 {
     connect(m_account->client(), &Jreen::Client::presenceReceived, this, &Roster::onPresenceReceived);
+    connect(m_account->client(), &Jreen::Client::iqReceived, this, &Roster::onIqReceived);
+    connect(m_account->client(), &Jreen::Client::messageReceived, this, &Roster::onMessageReceived);
+    connect(m_account->pubSubManager(), &Jreen::PubSub::Manager::eventReceived, this, &Roster::onEventReceived);
     connect(&m_vcardManager, &Jreen::VCardManager::vCardFetched, this, &Roster::onVCardFetched);
     connect(&m_vcardManager, &Jreen::VCardManager::vCardUpdateDetected, this, &Roster::onVCardUpdateDetected);
 }
@@ -41,6 +46,26 @@ void Roster::onPresenceReceived(const Jreen::Presence &presence)
             return;
         }
         m_contacts[presence.from().bare()]->presenceReceived(presence);
+    }
+}
+
+void Roster::onIqReceived(const Jreen::IQ &iq)
+{
+}
+
+void Roster::onMessageReceived(const Jreen::Message &message)
+{
+    qDebug() << "onMessageReceived " << message.from().full() << " " << message.body();
+}
+
+void Roster::onEventReceived(const Jreen::PubSub::Event::Ptr &event, const Jreen::JID &from)
+{
+    if (!m_contacts.contains(from.bare())) {
+        return;
+    }
+
+    for (auto item : event->items()) {
+        m_contacts[from.bare()]->eventReceived(item);
     }
 }
 

@@ -1,5 +1,6 @@
 #include "Contact.h"
 #include "Roster.h"
+#include <jreen/stanzaextension.h>
 #include <QtCore/QSharedPointer>
 #include <QtGui/QColor>
 #include <QtGui/QPainter>
@@ -40,6 +41,21 @@ QPixmap Contact::photo() const
     return contactPhoto;
 }
 
+Jreen::Activity::Ptr Contact::activity() const
+{
+    return m_activity;
+}
+
+Jreen::Mood::Ptr Contact::mood() const
+{
+    return m_mood;
+}
+
+Jreen::Tune::Ptr Contact::tune() const
+{
+    return m_tune;
+}
+
 ContactResource::Ptr Contact::mainResource() const
 {
     if (m_resources.size() == 0) {
@@ -64,6 +80,29 @@ void Contact::presenceReceived(const Jreen::Presence &presence)
     }
     std::sort(m_resources.rbegin(), m_resources.rend());
     emit contactChanged(jid());
+}
+
+void Contact::eventReceived(Jreen::Payload::Ptr &event)
+{
+    auto activity = Jreen::payload_cast<Jreen::Activity>(event);
+    if (activity) {
+        if (activity->general() == Jreen::Activity::InvalidGeneral || activity->general() == Jreen::Activity::EmptyGeneral) {
+            m_activity.clear();
+        } else {
+            m_activity = activity;
+        }
+        emit contactChanged(jid());
+    }
+
+    auto mood = Jreen::payload_cast<Jreen::Mood>(event);
+    if (mood) {
+        if (mood->type() == Jreen::Mood::Invalid || mood->type() == Jreen::Mood::Empty) {
+            m_mood.clear();
+        } else {
+            m_mood = mood;
+        }
+        emit contactChanged(jid());
+    }
 }
 
 void Contact::vCardFetched(const Jreen::VCard::Ptr &vcard)

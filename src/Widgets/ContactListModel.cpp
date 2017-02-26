@@ -21,9 +21,23 @@ QVariant ContactListModel::data(const QModelIndex &index, int role) const
         auto contact = m_contacts[index.row()];
 
         auto tooltip = QString("<b>%1</b> (%2)<br />").arg(contact->name(), contact->jid());
+
+        if (contact->activity()) {
+            auto activity = contact->activity();
+            tooltip += QString("<b>Activity:</b> ") + activity->generalName() + (activity->specificName().isEmpty() ? "" : QString(" - %1").arg(activity->specificName()))
+                + (activity->text().isEmpty() ? "" : QString(" (%1)").arg(activity->text()));
+            tooltip += "<br />";
+        }
+        if (contact->mood()) {
+            auto mood = contact->mood();
+            tooltip += QString("<b>Mood:</b> ") + mood->typeName() + (mood->text().isEmpty() ? "" : QString(" (%1)").arg(mood->text()));
+            tooltip += "<br />";
+        }
+
         for (auto &resource : contact->allResources()) {
             tooltip += QString("<b>%1</b> (%2): %3<br />").arg(resource->resource(), QString::number(resource->presence().priority()), resource->presenceText());
         }
+        
         return tooltip;
     }
     if (role == Qt::UserRole) {

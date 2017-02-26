@@ -31,7 +31,12 @@ QString ContactResource::resource() const
 
 QString ContactResource::presenceText() const
 {
-    switch (m_presence.subtype()) {
+    return ContactResource::presenceText(presenceType());
+}
+
+QString ContactResource::presenceText(Jreen::Presence::Type type)
+{
+    switch (type) {
         case Jreen::Presence::Unavailable:
             return "Offline";
 
@@ -68,4 +73,13 @@ Jreen::Presence ContactResource::presence() const
 void ContactResource::setPresence(const Jreen::Presence &jpresence)
 {
     this->m_presence = jpresence;
+}
+
+bool ContactResource::isOnline() const
+{
+    return presenceType() == Jreen::Presence::Available ||
+           presenceType() == Jreen::Presence::Chat ||
+           presenceType() == Jreen::Presence::Away ||
+           presenceType() == Jreen::Presence::DND ||
+           presenceType() == Jreen::Presence::XA;
 }

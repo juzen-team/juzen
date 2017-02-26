@@ -18,10 +18,13 @@ public:
 
     QString resource() const;
     QString presenceText() const;
+    static QString presenceText(Jreen::Presence::Type type);
     Jreen::Presence::Type presenceType() const;
 
     Jreen::Presence presence() const;
     void setPresence(const Jreen::Presence &jpresence);
+
+    bool isOnline() const;
 
 private:
     Jreen::Presence m_presence;

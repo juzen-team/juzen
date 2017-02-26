@@ -3,6 +3,10 @@
 
 #include "Roster/ContactResource.h"
 #include <jreen/abstractroster.h>
+#include <jreen/activity.h>
+#include <jreen/mood.h>
+#include <jreen/stanzaextension.h>
+#include <jreen/tune.h>
 #include <jreen/vcard.h>
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
@@ -22,10 +26,15 @@ public:
     QString name() const;
     QPixmap photo() const;
 
+    Jreen::Activity::Ptr activity() const;
+    Jreen::Mood::Ptr mood() const;
+    Jreen::Tune::Ptr tune() const;
+
     ContactResource::Ptr mainResource() const;
     QVector<ContactResource::Ptr> allResources() const;
 
     void presenceReceived(const Jreen::Presence &presence);
+    void eventReceived(Jreen::Payload::Ptr &event);
     void vCardFetched(const Jreen::VCard::Ptr &vcard);
 
 signals:
@@ -41,6 +50,10 @@ private:
     Jreen::RosterItem::Ptr m_rosterItem;
     QVector<ContactResource::Ptr> m_resources;
     Jreen::VCard::Ptr m_vcard;
+
+    Jreen::Activity::Ptr m_activity;
+    Jreen::Mood::Ptr m_mood;
+    Jreen::Tune::Ptr m_tune;
 };
 Q_DECLARE_METATYPE(Contact::Ptr)
 
